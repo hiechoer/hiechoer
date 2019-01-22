@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+        
+        
+        <link rel="shortcut icon" href="../../img/favicon.ico">
+        <title>event and signal-slot - Hiechoer</title>
+        <link href="../../css/bootstrap-custom.min.css" rel="stylesheet">
+        <link href="../../css/font-awesome.min.css" rel="stylesheet">
+        <link href="../../css/base.css" rel="stylesheet">
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/color-brewer.min.css">
+        <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+
+        <script src="../../js/jquery-1.10.2.min.js" defer></script>
+        <script src="../../js/bootstrap-3.0.3.min.js" defer></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+        <script>hljs.initHighlightingOnLoad();</script> 
+    </head>
+
+    <body>
+
+        <div class="navbar navbar-default navbar-fixed-top" role="navigation">
+            <div class="container">
+
+                <!-- Collapsed navigation -->
+                <div class="navbar-header">
+                    <!-- Expander button -->
+                    <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                        <span class="sr-only">Toggle navigation</span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <a class="navbar-brand" href="../..">Hiechoer</a>
+                </div>
+
+                <!-- Expanded navigation -->
+                <div class="navbar-collapse collapse">
+                        <!-- Main navigation -->
+                        <ul class="nav navbar-nav">
+                            <li >
+                                <a href="../..">Home</a>
+                            </li>
+                            <li class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">Blog <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    
+<li >
+    <a href="../">Qt</a>
+</li>
+                                    
+<li >
+    <a href="../../cpp/">C++</a>
+</li>
+                                    
+<li >
+    <a href="../../python/">Python</a>
+</li>
+                                    
+<li >
+    <a href="../../misc/">Misc</a>
+</li>
+                                    
+<li >
+    <a href="../../other/">Other</a>
+</li>
+                                </ul>
+                            </li>
+                            <li >
+                                <a href="../../about/">Find Us</a>
+                            </li>
+                        </ul>
+
+                    <ul class="nav navbar-nav navbar-right">
+                        <li>
+                            <a href="#" data-toggle="modal" data-target="#mkdocs_search_modal">
+                                <i class="fa fa-search"></i> Search
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="container">
+                <div class="col-md-3"><div class="bs-sidebar hidden-print affix well" role="complementary">
+    <ul class="nav bs-sidenav">
+        <li class="main active"><a href="#event-and-signal-slot">event and signal-slot</a></li>
+            <li><a href="#framework">framework</a></li>
+            <li><a href="#_1">如上图所示</a></li>
+    </ul>
+</div></div>
+                <div class="col-md-9" role="main">
+
+<h1 id="event-and-signal-slot">event and signal-slot</h1>
+<hr />
+<h3 id="framework">framework</h3>
+<p>以下是个人对QT中的事件event和信号槽(signal/slog)的理解, 未必正确, 仅供个人参考.</p>
+<pre><code>----------------------------------------------------------
+  对用户操作做出的响应事件 or 系统自动发出的事件
+        (如点击操作)             (如定时器)
+----------------------------------------------------------
+                          ||
+                          \/
+               -----------------------
+                      创建事件对象
+               -----------------------
+                         ||
+                         \/
+         ---------------------------------
+                  被事件过滤器过滤         &lt;=== &lt;1&gt;
+          例如在包含窗口中过载eventFilter
+         ---------------------------------
+                         ||
+                         \/
+            ----------------------------
+             事件分发之前可以自定义行为
+                通过过载event()        
+              比如改变tab键组件,或添加   &lt;=== &lt;2&gt;
+              自定义事件
+            ----------------------------
+                         ||
+                         \/
+       -----------------------------------------
+         将event对象传递给QObject的event函数
+        event函数按照事件类型分发给事件处理函数
+       ----------------------------------------
+
+               ||         or        ||
+               \/                   \/
+           ----------           ----------
+            事件队列             直接处理
+           ----------           ----------
+                \                 /
+              --------------------
+               对应的事件处理函数  &lt;=== &lt;3&gt;
+              --------------------
+                       ||
+                       \/
+             ----------------------
+              有可能发出信号signal  &lt;=== &lt;4&gt;
+             ----------------------
+                       ||
+                       \/
+             ----------------------
+              立即执行对应的槽钩子
+             ----------------------
+</code></pre>
+
+<h3 id="_1">如上图所示</h3>
+<ul>
+<li>如果使用组件的默认事件, 直接定义signal/slot - p4</li>
+<li>如果自定义组件行为, 在自定义组件中载父类同名事件处理函数, 有可能直接调用父类中函数默认行为. 例如mouseMoveEvent/mousePressEvent/mouseReleaseEvent - p3</li>
+<li>在窗口关闭时, 如果改变关闭时的默认行为, 事件处理函数中需要调用accept()或者ignore() - p3</li>
+<li>过载event时, 不是修改默认事件处理函数, 而是在事件分发之前协调事件或者添加自定义事件 - p2</li>
+<li>在父类中重写eventFilter, 在自身中通过installEventFilte把自身安装到父类事件过滤器中, 处理事件时就会先被过滤器过滤一遍, 例如某些组件不处理某些消息 - p1</li>
+</ul></div>
+        </div>
+
+        <footer class="col-md-12">
+            <hr>
+            <p>Documentation built with <a href="https://www.mkdocs.org/">MkDocs</a>.</p>
+        </footer>
+        <script>
+            var base_url = "../..",
+                shortcuts = {"search": 83, "next": 78, "help": 191, "previous": 80};
+        </script>
+        <script src="../../js/base.js" defer></script>
+        <script src="../../search/main.js" defer></script>
+
+        <div class="modal" id="mkdocs_search_modal" tabindex="-1" role="dialog" aria-labelledby="Search Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Search</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    From here you can search these documents. Enter
+                    your search terms below.
+                </p>
+                <form role="form">
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Search..." id="mkdocs-search-query" title="Type search term here">
+                    </div>
+                </form>
+                <div id="mkdocs-search-results"></div>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div><div class="modal" id="mkdocs_keyboard_modal" tabindex="-1" role="dialog" aria-labelledby="Keyboard Shortcuts Modal" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Keyboard Shortcuts</h4>
+            </div>
+            <div class="modal-body">
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th style="width: 20%;">Keys</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td class="help shortcut"><kbd>?</kbd></td>
+                    <td>Open this help</td>
+                  </tr>
+                  <tr>
+                    <td class="next shortcut"><kbd>n</kbd></td>
+                    <td>Next page</td>
+                  </tr>
+                  <tr>
+                    <td class="prev shortcut"><kbd>p</kbd></td>
+                    <td>Previous page</td>
+                  </tr>
+                  <tr>
+                    <td class="search shortcut"><kbd>s</kbd></td>
+                    <td>Search</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
+    </div>
+</div>
+
+    </body>
+</html>
