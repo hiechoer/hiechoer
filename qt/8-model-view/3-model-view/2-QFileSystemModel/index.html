@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../../../img/favicon.ico">
-  <title>QStringListModel - QListView - Hiechoer</title>
+  <title>QFileSystemWatcher - QTreeView - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "QStringListModel - QListView";
-    var mkdocs_page_input_path = "qt/8-model-view/3-model-view/1-QStringListModel.md";
+    var mkdocs_page_name = "QFileSystemWatcher - QTreeView";
+    var mkdocs_page_input_path = "qt/8-model-view/3-model-view/2-QFileSystemModel.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -107,7 +107,7 @@
     
       
     
-    <li>QStringListModel - QListView</li>
+    <li>QFileSystemWatcher - QTreeView</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,86 +117,94 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="qstringlistmodel-qlistview">QStringListModel - QListView</h1>
-<p>预定义model中QStringListModel是最简单的一种.</p>
+                <h1 id="qfilesystemwatcher-qtreeview">QFileSystemWatcher - QTreeView</h1>
+<p><strong>QDirModel在新QT版本中已经废弃了, 现在主要用QFileSystemWatcher和QFileSystemModel</strong></p>
 <h2 id="header">Header</h2>
-<p><code>#include &lt;QStringListModel&gt;</code></p>
+<pre><code>#include &lt;QHeaderView&gt;
+#include &lt;QFileSystemModel&gt;
+#include &lt;QTreeView&gt;
+#include &lt;QModelIndex&gt;
+#include &lt;QDir&gt;
+</code></pre>
+
 <h2 id="data-member">Data member</h2>
 <pre><code>QWidget *widget;
 QVBoxLayout *mainLayout;
 QHBoxLayout *btnLayout;
-QPushButton *insertBtn, *deleteBtn, *showBtn;
-QStringListModel *model;
-QListView *listView
+QPushButton *createBtn, *removeBtn;
+QFileSystemModel *fsModel;
+QTreeView *treeView
 </code></pre>
 
 <h2 id="slots">Slots</h2>
-<pre><code>void MainWindow::insertData() {
-    bool ok = false;
-    QString str = QInputDialog::getText(NULL, tr(&quot;input&quot;), tr(&quot;Input&quot;), QLineEdit::Normal, tr(&quot;Default string&quot;), &amp;ok);
-    if (ok) {
-        int curViewIdx = listView-&gt;currentIndex().row();
-        if (-1 == curViewIdx) {
-            // No data or no select in view currently
-            curViewIdx = 0;
+<pre><code>void MainWindow::createDir() {
+    bool ok;
+    QString name;
+    QModelIndex index = treeView-&gt;currentIndex();
+    if (!index.isValid()) {
+        index = fsModel-&gt;index(QDir::currentPath());
+    }
+
+    name = QInputDialog::getText(NULL, tr(&quot;dir name&quot;), tr(&quot;Input name&quot;), QLineEdit::Normal, tr(&quot;Default&quot;), &amp;ok);
+    if (!ok) {
+        return;
+    }
+
+    if (!name.isEmpty()) {
+        if (!fsModel-&gt;mkdir(index, name).isValid()) {
+            QMessageBox::information(NULL, tr(&quot;create dir fail&quot;), tr(&quot;create dir %1 fail&quot;).arg(name));
         }
-        model-&gt;insertRows(curViewIdx, 1);
-        QModelIndex curModelIdx = model-&gt;index(curViewIdx); // TODO: 没有实际意义, 因为listView-&gt;currentIndex已经可以返回QModelIndex类型
-        model-&gt;setData(curModelIdx, str);
-        listView-&gt;setCurrentIndex(curModelIdx);
-        listView-&gt;edit(curModelIdx); // edit status in view to this row
     }
 }
 
-void MainWindow::deleteData() {
-    int curViewIdx = listView-&gt;currentIndex().row();
-    if (-1 != curViewIdx) { // remove selected row
-        model-&gt;removeRows(curViewIdx, 1);
+void MainWindow::removeDir() {
+    QModelIndex index = treeView-&gt;currentIndex();
+    if (!index.isValid()) {
+        // report an error
+        return;
     }
-}
 
-void MainWindow::showData() {
-    QString info;
-    QStringList data = model-&gt;stringList();
-    QStringList::const_iterator iter = data.constBegin();
-    while (iter != data.constEnd()) {
-        info += &quot;\n&quot; + *iter;
-        iter ++;
+    QString name = fsModel-&gt;fileName(index);
+
+    bool ok;
+    if (fsModel-&gt;fileInfo(index).isDir()) {
+        ok = fsModel-&gt;rmdir(index);
+    } else {
+        ok = fsModel-&gt;remove(index);
     }
-    QMessageBox::information(NULL, tr(&quot;info:&quot;), info);
+    if (!ok) {
+        QMessageBox::information(NULL, tr(&quot;remove fail&quot;), tr(&quot;remove dir %1 fail&quot;).arg(name));
+    }
 }
 </code></pre>
 
 <h2 id="codes">Codes</h2>
-<pre><code>widget = new QWidget;
-mainLayout = new QVBoxLayout;
-
-insertBtn = new QPushButton(tr(&quot;insert&quot;), this);
-deleteBtn = new QPushButton(tr(&quot;delete&quot;), this);
-showBtn = new QPushButton(tr(&quot;show&quot;), this);
+<pre><code>createBtn = new QPushButton(tr(&quot;create&quot;), this);
+removeBtn = new QPushButton(tr(&quot;remove&quot;), this);
 btnLayout = new QHBoxLayout;
-btnLayout-&gt;addWidget(insertBtn);
-btnLayout-&gt;addWidget(deleteBtn);
-btnLayout-&gt;addWidget(showBtn);
+btnLayout-&gt;addWidget(createBtn);
+btnLayout-&gt;addWidget(removeBtn);
+fsModel = new QFileSystemModel(this);
+fsModel-&gt;setReadOnly(false);
+fsModel-&gt;setRootPath(QDir::currentPath()); // monitor by QFileSystemWatcher
+treeView = new QTreeView(this);
+treeView-&gt;setModel(fsModel);
+treeView-&gt;header()-&gt;setStretchLastSection(true);
+treeView-&gt;header()-&gt;setSortIndicator(0, Qt::AscendingOrder);
+treeView-&gt;header()-&gt;setSortIndicatorShown(true);
 
-model = new QStringListModel(this);
-QStringList data;
-data.append(&quot;11111&quot;);
-data.append(&quot;22222&quot;);
-data.append(&quot;33333&quot;);
-model-&gt;setStringList(data);
-listView = new QListView(this);
-listView-&gt;setModel(model);
+QModelIndex index = fsModel-&gt;index(QDir::currentPath());
+treeView-&gt;setRootIndex(index); // show from this path
+treeView-&gt;expand(index);
+treeView-&gt;scrollTo(index);
+treeView-&gt;setColumnWidth(0, 20);
+treeView-&gt;resizeColumnToContents(0);
 
 mainLayout-&gt;addLayout(btnLayout);
-mainLayout-&gt;addWidget(listView);
+mainLayout-&gt;addWidget(treeView);
 
-connect(insertBtn, SIGNAL(clicked()), this, SLOT(insertData()));
-connect(deleteBtn, SIGNAL(clicked()), this, SLOT(deleteData()));
-connect(showBtn, SIGNAL(clicked()), this, SLOT(showData()));
-
-widget-&gt;setLayout(mainLayout);
-setCentralWidget(widget);
+connect(createBtn, SIGNAL(clicked()), this, SLOT(createDir()));
+connect(removeBtn, SIGNAL(clicked()), this, SLOT(removeDir()));
 </code></pre>
               
             </div>

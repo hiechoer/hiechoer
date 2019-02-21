@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>Useful links of git - Hiechoer</title>
+  <title>Algo and Data type - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Useful links of git";
-    var mkdocs_page_input_path = "misc/git-server.md";
+    var mkdocs_page_name = "Algo and Data type";
+    var mkdocs_page_input_path = "qt/9-algo-data-type.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -59,7 +59,7 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../../qt/">Qt</a>
+    <a class="" href="../">Qt</a>
                 </li>
                 <li class="">
                     
@@ -71,7 +71,7 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../">Misc</a>
+    <a class="" href="../../misc/">Misc</a>
                 </li>
                 <li class="">
                     
@@ -107,7 +107,7 @@
     
       
     
-    <li>Useful links of git</li>
+    <li>Algo and Data type</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,46 +117,84 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="useful-links-of-git">Useful links of git</h1>
-<hr />
-<table>
-<thead>
-<tr>
-<th>Name</th>
-<th>Link</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>github</td>
-<td><a href="https://github.com/">https://github.com/</a></td>
-</tr>
-<tr>
-<td>bitbucket</td>
-<td><a href="https://bitbucket.org/">https://bitbucket.org/</a></td>
-</tr>
-<tr>
-<td>coding</td>
-<td><a href="https://coding.net/">https://coding.net/</a></td>
-</tr>
-<tr>
-<td>gogs</td>
-<td><a href="https://gogs.io/">https://gogs.io/</a></td>
-</tr>
-<tr>
-<td>gitee</td>
-<td><a href="https://gitee.com/">https://gitee.com/</a></td>
-</tr>
-<tr>
-<td>gitea</td>
-<td><a href="https://gitea.io/">https://gitea.io/</a></td>
-</tr>
-<tr>
-<td>codegit</td>
-<td><a href="https://codegit.net/">https://codegit.net/</a></td>
-</tr>
-</tbody>
-</table>
+                <h1 id="algo-and-data-type">Algo and Data type</h1>
+<h2 id="stl">通用算法(STL风格的遍历器)</h2>
+<ul>
+<li>qFind</li>
+<li>qFill</li>
+<li>qCopy</li>
+<li>qSort</li>
+<li>qSwap</li>
+<li>qAbs</li>
+<li>qMin</li>
+<li>qMax</li>
+</ul>
+<h2 id="_1">数据类型</h2>
+<h3 id="qstring">QString</h3>
+<pre><code>QString str = &quot;aaa&quot;;
+str = QString(&quot;bbb&quot;);
+</code></pre>
+
+<h4 id="_2">=, +, +=</h4>
+<pre><code>str = str + &quot;bbb&quot;;
+str += userName + &quot;\n&quot;;
+</code></pre>
+
+<h4 id="append">append</h4>
+<pre><code>str.append(&quot;ccc&quot;);
+</code></pre>
+
+<h4 id="sprintf">sprintf</h4>
+<pre><code>str.sprintf(&quot;%s ddd %d&quot;, &quot;aaaa&quot;, 555);
+</code></pre>
+
+<h4 id="arg">arg</h4>
+<pre><code>str = QString(&quot;%1 %2&quot;).arg(&quot;aaa&quot;).arg(111);
+</code></pre>
+
+<h4 id="number-and-setnum-translate-number-into-string">number and setNum (translate number into string)</h4>
+<pre><code>str = QString::number(222);
+str.setNum(333);
+</code></pre>
+
+<h4 id="toxxx">toXXX</h4>
+<pre><code>bool ok;
+int d = str.toInt(&amp;ok);
+if (ok) {
+} else {
+}
+</code></pre>
+
+<h4 id="mid-left-right">mid, left, right</h4>
+<pre><code>QString a = &quot;123456&quot;;
+QString b = a.mid(3, 2);
+</code></pre>
+
+<h4 id="indexof">indexOf</h4>
+<pre><code>QString a = &quot;abcdefg&quot;;
+QString b = &quot;de&quot;;
+int i = a.indexOf(b);
+</code></pre>
+
+<h4 id="startswith-sendswith">startsWith, sendsWith</h4>
+<pre><code>if (url.startsWith(&quot;https://&quot;) &amp;&amp; url.endsWith(&quot;.png&quot;)) {}
+</code></pre>
+
+<h4 id="translate-c-style-string-qstring">translate (c style string &lt;=&gt; QString)</h4>
+<pre><code>str += &quot;aaaa&quot;; // str to be a QString
+QString(&quot;bbbb&quot;); // 强制转换
+QString str = QString::fromUtf8(&quot;abcdefg&quot;);
+char* a = str.toUtf8();
+const char* a = qPrintable(QString(&quot;xxxxx&quot;));
+</code></pre>
+
+<h4 id="replace-trimmed-tolowwer-toupper-remove-insert-simplified">replace, trimmed, toLowwer, toUpper, remove, insert, simplified</h4>
+<h3 id="qvariant">QVariant</h3>
+<p>可以存储任意类型的值, 也被用于构建meta-object, 因此是QtCore的一部分</p>
+<h4 id="value">value()</h4>
+<pre><code>QIcon icon = var.value&lt;QIcon&gt;(); // 非GUI模块中和GUI模块中都适用
+int a = var.toInt(); // 非GUI模块中, toString, to...
+</code></pre>
               
             </div>
           </div>
