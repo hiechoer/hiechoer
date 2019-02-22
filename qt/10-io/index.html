@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="None">
+  
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>Qt: problems - Hiechoer</title>
+  <title>File - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Qt: problems";
-    var mkdocs_page_input_path = "qt/problems/index.md";
+    var mkdocs_page_name = "File";
+    var mkdocs_page_input_path = "qt/10-io.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -107,7 +107,7 @@
     
       
     
-    <li>Qt: problems</li>
+    <li>File</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,9 +117,117 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="qt-problems">Qt: problems</h1>
-<hr />
-<h3 id="1-setcentralwidget-and-layout"><a href="1-centralwidget/">1. setCentralWidget and layout</a></h3>
+                <h1 id="file">File</h1>
+<h2 id="qiodevice">QIODevice</h2>
+<h3 id="_1">设备类型</h3>
+<h4 id="_2">随机访问设备</h4>
+<ul>
+<li>QFile</li>
+<li>QTemporaryFile</li>
+<li>QBuffer</li>
+</ul>
+<h4 id="_3">顺序访问设备</h4>
+<ul>
+<li>QProcess</li>
+<li>QTcpSocket</li>
+<li>QUdpSocket</li>
+<li>QSslSocket</li>
+</ul>
+<h2 id="_4">访问方式</h2>
+<ul>
+<li>QDataStream: 二进制文件读写</li>
+<li>QTextStream: 文本文件读写</li>
+</ul>
+<h2 id="example">example</h2>
+<h3 id="_5">二进制文件读写</h3>
+<h4 id="headers">Headers</h4>
+<pre><code>#include &lt;QFile&gt;
+#include &lt;QDataStream&gt;
+#include &lt;QImage&gt;
+#include &lt;QMap&gt;
+</code></pre>
+
+<h4 id="codes">Codes</h4>
+<pre><code>    QImage image(&quot;:/close.png&quot;);
+    QMap&lt;QString, QColor&gt; map;
+    map.insert(&quot;red&quot;, Qt::red);
+    map.insert(&quot;green&quot;, Qt::green);
+    map.insert(&quot;white&quot;, Qt::white);
+    QFile file(&quot;new.dat&quot;);
+    QDataStream out(&amp;file);
+
+    if (!file.open(QIODevice::WriteOnly)) {
+        QMessageBox::information(NULL, tr(&quot;Open fail&quot;), tr(&quot;Open fail&quot;));
+        return;
+    }
+    out.setVersion(QDataStream::Qt_5_9);
+    out &lt;&lt; quint32(0xdeadabcd) &lt;&lt; quint32(592) &lt;&lt; image &lt;&lt; map;
+    file.close();
+
+    QImage image2;
+    QMap&lt;QString, QColor&gt; map2;
+    quint32 magic, v;
+    QDataStream in(&amp;file);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::information(NULL, tr(&quot;Read fail&quot;), tr(&quot;Read fail&quot;));
+        return;
+    }
+    in.setVersion(QDataStream::Qt_5_9);
+    in &gt;&gt; magic;
+    if (0xdeadabcd != magic) {
+        QMessageBox::information(NULL, tr(&quot;File formation wrong&quot;), tr(&quot;File formation wrong&quot;));
+        return;
+    }
+    in &gt;&gt; v;
+#if 0
+    if (v &gt; 592) {
+    } else if (v &lt; 592) {
+    }
+#else
+    if (v != 592) {
+        QMessageBox::information(NULL, tr(&quot;invalid version number&quot;), tr(&quot;invalid version number&quot;));
+        return;
+    }
+#endif
+    in.setVersion(QDataStream::Qt_5_9);
+    in &gt;&gt; image2 &gt;&gt; map2;
+    QMessageBox::information(NULL, tr(&quot;read file&quot;), QString(&quot;magic: %1, v: %2&quot;).arg(magic).arg(v));
+    file.close();
+</code></pre>
+
+<h3 id="_6">文本文件读写</h3>
+<h4 id="headers_1">Headers</h4>
+<pre><code>#include &lt;QFile&gt;
+#include &lt;QTextStream
+</code></pre>
+
+<h4 id="codes_1">Codes</h4>
+<pre><code>    QFile file(&quot;new.txt&quot;);
+    QTextStream out(&amp;file);
+
+    if (!file.open(QIODevice::WriteOnly)) {
+        QMessageBox::information(NULL, tr(&quot;Open fail&quot;), tr(&quot;Open fail&quot;));
+        return;
+    }
+#if 0
+    out.setCodec(&quot;UTF-8&quot;);
+    out.setIntegerBase(16);
+    out.setNumberFlags(QTextStream::ShowBase);
+#else
+    out &lt;&lt; showbase &lt;&lt; uppercasedigits &lt;&lt; hex;
+#endif
+    out &lt;&lt; &quot;abcdefg&quot; &lt;&lt; 12345;
+    file.close();
+
+    QTextStream in(&amp;file);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::information(NULL, tr(&quot;Open fail&quot;), tr(&quot;Open fail&quot;));
+        return;
+    }
+    QString content = in.readAll(); // in.readline()
+    QMessageBox::information(NULL, tr(&quot;read file&quot;), content);
+    file.close();
+</code></pre>
               
             </div>
           </div>
@@ -156,8 +264,3 @@
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-02-22 07:39:15
--->
