@@ -120,8 +120,8 @@
                 <h1 id="shared-library">shared library</h1>
 <p>Path: <code>Projects -&gt; New Project -&gt; Library -&gt; C++ Library</code>
 Name: mywin</p>
-<p>Most of times, we will only build shared library for algo but not GUI.</p>
-<h2 id="codes">Codes</h2>
+<p>Most of times, we will only build shared library for algo but not GUI, you'd better don't export class but only function from library.</p>
+<h2 id="codes-to-load-shared-library-at-program-startup">Codes to load shared library at program startup</h2>
 <h3 id="mywin_globalh"><code>mywin_global.h</code></h3>
 <pre><code>#ifndef MYWIN_GLOBAL_H
 #define MYWIN_GLOBAL_H
@@ -154,7 +154,8 @@ class MYWINSHARED_EXPORT Mywin: public QMainWindow
         Mywin(QWidget *parent = 0);
 
     private:
-        QHBoxLayout *layout;
+        QHBoxLayout *lout;
+        QWidget *wgt;
         QPushButton *btn;
 };
 
@@ -167,26 +168,134 @@ class MYWINSHARED_EXPORT Mywin: public QMainWindow
 
 Mywin::Mywin(QWidget *parent): QMainWindow (parent)
 {
-    layout = new QHBoxLayout;
+    wgt = new QWidget;
+    setCentralWidget(wgt);
+
+    lout = new QHBoxLayout(wgt); // set parent to wgt to avoid warning
+    wgt-&gt;setLayout(lout);
+
     btn = new QPushButton(tr(&quot;temp&quot;));
-    layout-&gt;addWidget(btn);
-    setLayout(layout);
+    lout-&gt;addWidget(btn);
 }
 </code></pre>
 
-<h2 id="how-to-run">how to run</h2>
+<h2 id="how-to-run-in-new-proj">how to run in new proj</h2>
 <ul>
 <li>compile project</li>
 <li>create a new project</li>
-<li>edit newproj.pro, add two lines(maybe copy so to /usr/lib, etc):</li>
+<li>edit newproj.pro</li>
 </ul>
-<pre><code>INCLUDEPATH += /path/to/mywin
+<pre><code>add two lines:
+INCLUDEPATH += /path/to/mywin
 LIBS += -L/path/to/so -lmywi
+
+For example:
+INCLUDEPATH += ../mywin
+LIBS += -L../build-mywin-Desktop_Qt_5_12_0_GCC_64bit-Debug -lmywin
+
+Or right click on new-proj, click Add Library... -&gt; External library -&gt; fill Library file and path, qtcreator will add some confs in new-proj.pro automatelly, for example:
+unix:!macx: LIBS += -L$$PWD/../build-mywin-Desktop_Qt_5_12_0_GCC_64bit-Debug/ -lmywin
+
+INCLUDEPATH += $$PWD/../mywin
+DEPENDPATH += $$PWD/../mywin
+</code></pre>
+
+<ul>
+<li>edit <code>LD_LIBRARY_PATH</code></li>
+</ul>
+<pre><code>On left side:
+click Projects -&gt; Build &amp; Run -&gt; Run
+In Run Settings -&gt; Run Environment -&gt; Details:
+append patch to LD_LIBRARY_PATH: old-pathes:/home/xxx/a/codes/qtproj/build-mywin-Desktop_Qt_5_12_0_GCC_64bit-Debug
+</code></pre>
+
+<ul>
+<li>
+<p>set new-proj to Active Project</p>
+</li>
+<li>
+<p>edit codes in newproj</p>
+</li>
+</ul>
+<pre><code>#include &quot;mywin.h&quot;
+
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+
+    Mywin w;
+    w.show();
+
+    return a.exec();
+}
 </code></pre>
 
 <ul>
 <li>build newproj and run</li>
 </ul>
+<h2 id="how-to-run-without-qtcreator">how to run without QtCreator</h2>
+<ul>
+<li>copy shared libraries to /usr/local/lib..., etc</li>
+<li>edit <code>/etc/ld.so.conf...</code>, add your new path to shared libraries, then exec command ldconfig</li>
+<li>edit environment var:</li>
+</ul>
+<pre><code>Show values:
+export $LD_LIBRARY_PATH
+
+append value:
+export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:new/path
+</code></pre>
+
+<h2 id="codes-to-load-shared-library-at-runtime-for-example-shared-library-as-a-plugin">Codes to load shared library at runtime (for example: shared library as a plugin)</h2>
+<p><strong>这种调用方法没必要include库的头文件, 也没必要修改LIBS/INCLUDEPATH, 但是要求在库中导出符号时使用MYTEXTSHARED_EXPORT</strong></p>
+<p><strong>暂时没实验成功直接从动态库中导出类的方法, 直接导出类的时候容易造成Dll Hell这种很难解决的问题</strong></p>
+<p><strong>可以在动态库中封装一个函数来处理类, 来避免直接导出类</strong></p>
+<h3 id="mywin_globalh_1"><code>mywin_global.h</code></h3>
+<p>The same as previous file</p>
+<h3 id="mywinh_1"><code>mywin.h</code></h3>
+<pre><code>extern &quot;C&quot; { // it is important
+    int MYTEXTSHARED_EXPORT try_add(int, int);
+}
+</code></pre>
+
+<h3 id="mywincpp_1"><code>mywin.cpp</code></h3>
+<pre><code>int try_add(int a, int b) {
+    return a + b;
+}
+</code></pre>
+
+<h2 id="how-to-run-in-new-proj_1">how to run in new proj</h2>
+<ul>
+<li>compile project</li>
+<li>create a new project</li>
+<li>edit <code>LD_LIBRARY_PATH</code> (the same as previous step)</li>
+<li>set new-proj to Active Project</li>
+<li>edit codes in newproj</li>
+</ul>
+<pre><code>typedef int (*Myfunc)(int, int);
+#if 1
+QLibrary lib(&quot;mytext&quot;);
+int sum = 0;
+if (!lib.load()) {
+    QMessageBox::information(NULL, &quot;title&quot;, &quot;not load&quot;);
+}
+Myfunc func = (Myfunc)lib.resolve(&quot;try_add&quot;);
+#else // Or you can use static function in QLibrary
+Myfunc func = (Myfunc)QLibrary::resolve(&quot;mytext&quot;, &quot;try_add&quot;);
+#endif
+if (func) {
+    sum = func(100, 200);
+} else {
+    QMessageBox::information(NULL, &quot;title&quot;, &quot;fun is NULL&quot;);
+}
+QMessageBox::information(NULL, &quot;title&quot;, QString::number(sum));
+</code></pre>
+
+<ul>
+<li>build newproj and run</li>
+</ul>
+<h2 id="how-to-run-without-qtcreator_1">how to run without QtCreator</h2>
+<p>The same as previous step</p>
               
             </div>
           </div>

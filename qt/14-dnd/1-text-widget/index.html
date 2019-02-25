@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../../img/favicon.ico">
-  <title>setCentralWidget & layout - Hiechoer</title>
+  <title>drag text file to widget - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "setCentralWidget & layout";
-    var mkdocs_page_input_path = "qt/problems/1-centralwidget.md";
+    var mkdocs_page_name = "drag text file to widget";
+    var mkdocs_page_input_path = "qt/14-dnd/1-text-widget.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -107,7 +107,7 @@
     
       
     
-    <li>setCentralWidget & layout</li>
+    <li>drag text file to widget</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,14 +117,62 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="setcentralwidget-layout">setCentralWidget &amp; layout</h1>
-<hr />
-<ul>
-<li>create a widget</li>
-<li>add layout in this widget (maybe the parent is previous widget created just now if it is shared library project)</li>
-<li>add more widgets in layout</li>
-<li>then call setCentralWidget(widget)</li>
-</ul>
+                <h1 id="drag-text-file-to-widget">drag text file to widget</h1>
+<h2 id="codes">Codes</h2>
+<h3 id="data-member-and-member-function-in-class-mainwindow">Data member and member function in class MainWindow</h3>
+<pre><code>protected:
+    void dragEnterEvent(QDragEnterEvent *event);
+    void dropEvent(QDropEvent *event);
+
+private:
+    QTextEdit *textEdit;
+</code></pre>
+
+<h3 id="headers">Headers</h3>
+<pre><code>#include &lt;QTextEdit&gt;
+#include &lt;QDragEnterEvent&gt;
+#include &lt;QDropEvent&gt;
+#include &lt;QMimeData&gt;
+#include &lt;QList&gt;
+#include &lt;QUrl&gt;
+#include &lt;QFile&gt;
+#include &lt;QTextStream&gt;
+</code></pre>
+
+<h3 id="in-constructure-of-mainwindow">in constructure of MainWindow</h3>
+<pre><code>textEdit = new QTextEdit(tr(&quot;Drop text file&quot;), this);
+textEdit-&gt;setAcceptDrops(false);
+setAcceptDrops(true);
+mainLayout-&gt;addWidget(textEdit);
+</code></pre>
+
+<h3 id="events">events</h3>
+<pre><code>void MainWindow::dragEnterEvent(QDragEnterEvent *event) {
+    if (event-&gt;mimeData()-&gt;hasFormat(&quot;text/uri-list&quot;)) {
+        event-&gt;acceptProposedAction();
+    }
+}
+
+void MainWindow::dropEvent(QDropEvent *event) {
+    QList&lt;QUrl&gt; list = event-&gt;mimeData()-&gt;urls();
+    if (list.isEmpty()) {
+        QMessageBox::information(NULL, tr(&quot;no file selected&quot;), tr(&quot;no file selected&quot;));
+    }
+    if (list.size() &gt; 1) {
+        QMessageBox::information(NULL, tr(&quot;files&quot;), tr(&quot;only 1 file can be accepted&quot;));
+    }
+    QString fname = list.first().toLocalFile();
+    QFile file(fname);
+    if (!file.open(QIODevice::ReadOnly)) {
+        QMessageBox::information(NULL, tr(&quot;open file&quot;), tr(&quot;open file fail&quot;));
+    }
+    QTextStream in(&amp;file);
+    QString content;
+    content = in.readAll();
+    textEdit-&gt;setText(content);
+    file.close();
+}
+</code></pre>
               
             </div>
           </div>
