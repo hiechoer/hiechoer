@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="None">
+  
   
   <link rel="shortcut icon" href="../../../img/favicon.ico">
-  <title>Qt: model-view - Hiechoer</title>
+  <title>clipboard - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Qt: model-view";
-    var mkdocs_page_input_path = "qt/8-model-view/3-model-view/index.md";
+    var mkdocs_page_name = "clipboard";
+    var mkdocs_page_input_path = "qt/14-dnd/2-clipboard.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -107,7 +107,7 @@
     
       
     
-    <li>Qt: model-view</li>
+    <li>clipboard</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,18 +117,89 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="qt-model-view">Qt: model-view</h1>
-<p>在model-view中, view分为三类: list, table, tree, 但是model千奇百怪, 不同的建模会有不同的model. 分为预定义的model(如QStringListModel)和自定义的model.</p>
-<hr />
-<h3 id="1-qstringlistmodel-and-qlistview"><a href="1-QStringListModel/">1. QStringListModel and QListView</a></h3>
-<hr />
-<h3 id="2-qfilesystemmodel-and-qtreeview"><a href="2-QFileSystemModel/">2. QFileSystemModel and QTreeView</a></h3>
-<hr />
-<h3 id="3-qsortfilterproxymodel-and-qlistview"><a href="3-QSortFilterProxyModel/">3. QSortFilterProxyModel and QListView</a></h3>
-<hr />
-<h3 id="4-self-defined-model"><a href="4-self-defined-model/">4. Self-defined Model</a></h3>
-<hr />
-<h3 id="5-self-defined-delegate"><a href="5-self-defined-delegate/">5. Self-defined Delegate</a></h3>
+                <h1 id="clipboard">clipboard</h1>
+<h2 id="headers">Headers</h2>
+<pre><code>#include &lt;QApplication&gt;
+#include &lt;QVBoxLayout&gt;
+#include &lt;QHBoxLayout&gt;
+#include &lt;QLabel&gt;
+#include &lt;QTextEdit&gt;
+#include &lt;QPushButton&gt;
+#include &lt;QClipboard&gt;
+</code></pre>
+
+<h2 id="class">Class</h2>
+<pre><code>class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+
+private slots:
+    void execAction();
+
+    void setClipboard();
+    void getClipboard();
+
+private:
+    QWidget *widget;
+    QVBoxLayout *mainLayout;
+
+    QLabel *label;
+    QTextEdit *textEdit;
+    QPushButton *copyBtn;
+    QPushButton *pasteBtn;
+    QHBoxLayout *topLayout;
+    QHBoxLayout *bottomLayout;
+};
+</code></pre>
+
+<h2 id="slots">Slots</h2>
+<pre><code>void MainWindow::setClipboard() {
+    QClipboard *clipBoard = QApplication::clipboard();
+    clipBoard-&gt;setText(textEdit-&gt;toPlainText());
+}
+
+void MainWindow::getClipboard() {
+    QClipboard *clipBoard = QApplication::clipboard();
+    textEdit-&gt;setText(clipBoard-&gt;text());
+}
+</code></pre>
+
+<h2 id="codes-in-constructor">Codes in constructor</h2>
+<pre><code>MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+{
+    widget = new QWidget;
+    mainLayout = new QVBoxLayout;
+
+    label = new QLabel(tr(&quot;Input&quot;));
+    textEdit = new QTextEdit;
+    copyBtn = new QPushButton(tr(&quot;Set to clipboard&quot;));
+    pasteBtn = new QPushButton(tr(&quot;Get from clipboard&quot;));
+    label-&gt;setBuddy(textEdit);
+    topLayout = new QHBoxLayout;
+    bottomLayout = new QHBoxLayout;
+    topLayout-&gt;addWidget(label);
+    topLayout-&gt;addWidget(textEdit);
+    bottomLayout-&gt;addWidget(copyBtn);
+    bottomLayout-&gt;addWidget(pasteBtn);
+    mainLayout-&gt;addLayout(topLayout);
+    mainLayout-&gt;addLayout(bottomLayout);
+
+    connect(copyBtn, SIGNAL(clicked()), this, SLOT(setClipboard()));
+    connect(pasteBtn, SIGNAL(clicked()), this, SLOT(getClipboard()));
+    widget-&gt;setLayout(mainLayout);
+
+    setCentralWidget(widget);
+    setFixedSize(800, 400);
+}
+</code></pre>
+
+<h2 id="datachanged">dataChanged</h2>
+<p>QClipboard类提供了dataChanged()信号, 用来监听剪切板数据变化</p>
               
             </div>
           </div>
@@ -165,8 +236,3 @@
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-02-26 05:15:51
--->
