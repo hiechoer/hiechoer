@@ -206,7 +206,7 @@ DEPENDPATH += $$PWD/../mywin
 <pre><code>On left side:
 click Projects -&gt; Build &amp; Run -&gt; Run
 In Run Settings -&gt; Run Environment -&gt; Details:
-append patch to LD_LIBRARY_PATH: old-pathes:/home/xxx/a/codes/qtproj/build-mywin-Desktop_Qt_5_12_0_GCC_64bit-Debug
+append path to LD_LIBRARY_PATH: old-pathes:/home/xxx/a/codes/qtproj/build-mywin-Desktop_Qt_5_12_0_GCC_64bit-Debug
 </code></pre>
 
 <ul>
@@ -247,7 +247,8 @@ export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:new/path
 </code></pre>
 
 <h2 id="codes-to-load-shared-library-at-runtime-for-example-shared-library-as-a-plugin">Codes to load shared library at runtime (for example: shared library as a plugin)</h2>
-<p><strong>这种调用方法没必要include库的头文件, 也没必要修改LIBS/INCLUDEPATH, 但是要求在库中导出符号时使用MYTEXTSHARED_EXPORT</strong></p>
+<p><strong>这种调用方法没必要include库的头文件, 也没必要修改<code>LIBS/INCLUDEPATH</code></strong></p>
+<p><strong>但是要求在库中导出符号时使用<code>MYTEXTSHARED_EXPORT</code>, 并一般使用<code>extern "C"</code>来防止C++的函数名粉碎</strong></p>
 <p><strong>暂时没实验成功直接从动态库中导出类的方法, 直接导出类的时候容易造成Dll Hell这种很难解决的问题</strong></p>
 <p><strong>可以在动态库中封装一个函数来处理类, 来避免直接导出类</strong></p>
 <h3 id="mywin_globalh_1"><code>mywin_global.h</code></h3>
