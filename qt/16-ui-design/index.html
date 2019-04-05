@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="None">
+  
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>Qt: problems - Hiechoer</title>
+  <title>ui design - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Qt: problems";
-    var mkdocs_page_input_path = "qt/problems/index.md";
+    var mkdocs_page_name = "ui design";
+    var mkdocs_page_input_path = "qt/16-ui-design.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -107,7 +107,7 @@
     
       
     
-    <li>Qt: problems</li>
+    <li>ui design</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,19 +117,111 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="qt-problems">Qt: problems</h1>
-<hr />
-<h3 id="0-misc"><a href="0-misc/">0. misc</a></h3>
-<hr />
-<h3 id="1-setcentralwidget-and-layout"><a href="1-centralwidget/">1. setCentralWidget and layout</a></h3>
-<hr />
-<h3 id="2-install-packages"><a href="2-install-packages/">2. install packages</a></h3>
-<hr />
-<h3 id="3-missing-packages"><a href="3-missing-packages/">3. missing packages</a></h3>
-<hr />
-<h3 id="4-not-enough-disk-space-to-store-temporary-files"><a href="4-disk-space-when-install/">4. not enough disk space to store temporary files!</a></h3>
-<hr />
-<h3 id="5-error-while-running-application"><a href="5-running-error/">5. error while running application</a></h3>
+                <h1 id="ui-design">ui design</h1>
+<h2 id="resource">resource</h2>
+<ul>
+<li>add <code>Qt Resource File</code></li>
+<li>add prefix</li>
+<li>add icon files</li>
+</ul>
+<h2 id="menu">menu</h2>
+<ul>
+<li><code>Type here</code> on top (<code>name(&amp;N)</code>)</li>
+<li>add slot function</li>
+<li>add connect in constructor</li>
+<li>in <code>Action Editor</code>, add icon</li>
+</ul>
+<h2 id="toolbar">toolbar</h2>
+<ul>
+<li>drag action from <code>Action Editor</code> to toolbar</li>
+<li>add new toolbar: <code>Add Tool Bar</code> on <code>MainWindow</code></li>
+</ul>
+<h2 id="signalslot">signal/slot</h2>
+<ul>
+<li>F4 to <code>Edit Signals/Slots</code></li>
+<li>internal slot: drag from one signal widgit to slot widget, then edit</li>
+<li>self-defined slot to button: right click to <code>Go to slot...</code>, then connect in constructor</li>
+</ul>
+<h2 id="name-of-widget">name of widget</h2>
+<ul>
+<li>right click to <code>Change objectName</code></li>
+</ul>
+<h2 id="hide-echo-in-qlineedit">hide echo in QLineEdit</h2>
+<ul>
+<li>set <code>echoMode</code> to <code>Password</code></li>
+<li>special: ollydbg on windows, EDB on linux</li>
+</ul>
+<h2 id="fixed-size">fixed size</h2>
+<ul>
+<li>set maximumSize and minimuSize to be the same</li>
+</ul>
+<h2 id="about-qt">about Qt</h2>
+<p>qApp is global instance of QCoreApplication, so:</p>
+<p><code>connect(ui-&gt;actionAboutQt_Q, SIGNAL(triggered()), qApp, SLOT(aboutQt()));</code></p>
+<h2 id="add-1-more-dialog">add 1 more Dialog</h2>
+<ul>
+<li>right click project</li>
+<li><code>Add New...</code> -&gt; <code>Files and Classes</code> -&gt; <code>Qt</code> -&gt; <code>At Designer Form Class</code></li>
+<li><code>Dialog without Buttons</code></li>
+<li>modify class name</li>
+<li>include <newdialog.h> in <code>mainwindow.cpp</code></li>
+<li><code>AboutDialog *aboutDlg = new AboutDialog; aboutDlg-&gt;show();</code> in <code>mainwindow.cpp</code></li>
+</ul>
+<h2 id="show-gif">show gif</h2>
+<ul>
+<li>add gif file to resource</li>
+<li>add a Label in a dialog (for example)</li>
+<li><code>#include &lt;QMovie&gt;</code></li>
+<li>add private data member <code>QMovie *movie;</code></li>
+<li>add 2 buttons</li>
+<li>set movie in label, connect 2 signal/slot(s)</li>
+</ul>
+<pre><code>#include &quot;aboutdialog.h&quot;
+#include &quot;ui_aboutdialog.h&quot;
+
+AboutDialog::AboutDialog(QWidget *parent) :
+    QDialog(parent),
+    ui(new Ui::AboutDialog)
+{
+    ui-&gt;setupUi(this);
+    movie = new QMovie(&quot;:/resource/icons/resource/play.gif&quot;);
+    ui-&gt;labelMovie-&gt;setMovie(movie);
+    connect(ui-&gt;pushButtonStart, SIGNAL(clicked()), movie, SLOT(start()));
+    connect(ui-&gt;pushButtonStop, SIGNAL(clicked()), movie, SLOT(stop()));
+    movie-&gt;start();
+}
+
+AboutDialog::~AboutDialog()
+{
+    delete movie;
+    delete ui;
+}
+</code></pre>
+
+<h2 id="mediaplayer">mediaplayer</h2>
+<h2 id="splash-screen">splash screen</h2>
+<pre><code>#include &quot;mainwindow.h&quot;
+#include &lt;QApplication&gt;
+
+#include &lt;QPixmap&gt;
+#include &lt;QSplashScreen&gt;
+
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    QPixmap pixmap(&quot;:/resource/icons/resource/start.jpg&quot;);
+    QSplashScreen startScreen(pixmap);
+    startScreen.show();
+    // do some initialize here {
+    for (int i = 0; i &lt; 300000000; i ++);
+    // }
+    MainWindow w;
+    w.show();
+    startScreen.finish(&amp;w);
+
+    return a.exec();
+}
+</code></pre>
               
             </div>
           </div>
@@ -166,8 +258,3 @@
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-04-05 10:58:10
--->

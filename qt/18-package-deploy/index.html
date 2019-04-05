@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="None">
+  
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>Qt: problems - Hiechoer</title>
+  <title>package and deploy - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Qt: problems";
-    var mkdocs_page_input_path = "qt/problems/index.md";
+    var mkdocs_page_name = "package and deploy";
+    var mkdocs_page_input_path = "qt/18-package-deploy.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -107,7 +107,7 @@
     
       
     
-    <li>Qt: problems</li>
+    <li>package and deploy</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,19 +117,61 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="qt-problems">Qt: problems</h1>
-<hr />
-<h3 id="0-misc"><a href="0-misc/">0. misc</a></h3>
-<hr />
-<h3 id="1-setcentralwidget-and-layout"><a href="1-centralwidget/">1. setCentralWidget and layout</a></h3>
-<hr />
-<h3 id="2-install-packages"><a href="2-install-packages/">2. install packages</a></h3>
-<hr />
-<h3 id="3-missing-packages"><a href="3-missing-packages/">3. missing packages</a></h3>
-<hr />
-<h3 id="4-not-enough-disk-space-to-store-temporary-files"><a href="4-disk-space-when-install/">4. not enough disk space to store temporary files!</a></h3>
-<hr />
-<h3 id="5-error-while-running-application"><a href="5-running-error/">5. error while running application</a></h3>
+                <h1 id="package-and-deploy">package and deploy</h1>
+<h2 id="official">official</h2>
+<h3 id="official-document">official document</h3>
+<ul>
+<li><code>https://doc.qt.io/qt-5/deployment.html</code></li>
+<li><code>https://doc.qt.io/qt-5/linux-deployment.html</code></li>
+</ul>
+<h3 id="2-types-for-deploying">2 types for deploying</h3>
+<ul>
+<li>static links</li>
+<li>shared libraries (ldd to get dependencies)</li>
+</ul>
+<h2 id="appimage-for-static-links">appimage for static links</h2>
+<h3 id="donwload-and-install">donwload and install</h3>
+<h4 id="linuxdeployqt">linuxdeployqt</h4>
+<ul>
+<li>download <code>linuxdeployqt-continuous-x86_64.AppImage</code> from <code>https://github.com/probonopd/linuxdeployqt/releases</code></li>
+<li>mv linuxdeployqt-continuous-x86_64.AppImage /usr/local/bin/linuxdeployqt</li>
+<li>chmod a+x /usr/local/bin/linuxdeployqt</li>
+<li>linuxdeplotqt --version</li>
+</ul>
+<h4 id="patchelf">patchelf</h4>
+<ul>
+<li>download <code>patchelf-0.9.tar.gz</code> from <code>https://nixos.org/releases/patchelf/patchelf-0.9/patchelf-0.9.tar.gz</code>, and install it.</li>
+<li>or pacman -S patchelf</li>
+</ul>
+<h3 id="appimagetool">appimagetool</h3>
+<ul>
+<li>download <code>appimagetool</code> from <code>https://github.com/probonopd/AppImageKit/releases/download/continuous/appimagetool-x86_64.AppImage</code></li>
+<li>mv appimagetool-x86_64.AppImage /usr/local/bin/appimagetool</li>
+<li>chmod a+x /usr/local/bin/appimagetool</li>
+</ul>
+<h3 id="how-to-linuxdeployqt">how to linuxdeployqt</h3>
+<ul>
+<li>mkdir newdir</li>
+<li>copy your bin (app-binary) into newdir</li>
+<li>exec <code>linuxdepliyqt app-binary -appimage</code></li>
+<li>you can see app-binary.Appimage in newdir</li>
+</ul>
+<h3 id="how-to-add-icons">how to add icons</h3>
+<p>search "Setting the Application Icon" in qtcreator, see: <code>Setting the Application Icon on Common Linux Desktops</code></p>
+<ul>
+<li>setIcon to add icon on statusvar and title</li>
+<li>to add icon to app-binary itself (neet to try this case)</li>
+</ul>
+<pre><code>1. only change pro file
+in newpro.pro, add: RC_ICONS = logo.ico, add logo.ico in root dir of newpro
+2. new logo.rc
+content: IDI_ICON1    ICON   DISCARDABLE    &quot;logo.ico&quot;
+in pro file: RC_FILE = logo.rc
+</code></pre>
+
+<ul>
+<li>rebuild all</li>
+</ul>
               
             </div>
           </div>
@@ -166,8 +208,3 @@
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-04-05 10:58:10
--->

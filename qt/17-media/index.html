@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="None">
+  
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>Qt: problems - Hiechoer</title>
+  <title>media - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Qt: problems";
-    var mkdocs_page_input_path = "qt/problems/index.md";
+    var mkdocs_page_name = "media";
+    var mkdocs_page_input_path = "qt/17-media.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -107,7 +107,7 @@
     
       
     
-    <li>Qt: problems</li>
+    <li>media</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,19 +117,112 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="qt-problems">Qt: problems</h1>
-<hr />
-<h3 id="0-misc"><a href="0-misc/">0. misc</a></h3>
-<hr />
-<h3 id="1-setcentralwidget-and-layout"><a href="1-centralwidget/">1. setCentralWidget and layout</a></h3>
-<hr />
-<h3 id="2-install-packages"><a href="2-install-packages/">2. install packages</a></h3>
-<hr />
-<h3 id="3-missing-packages"><a href="3-missing-packages/">3. missing packages</a></h3>
-<hr />
-<h3 id="4-not-enough-disk-space-to-store-temporary-files"><a href="4-disk-space-when-install/">4. not enough disk space to store temporary files!</a></h3>
-<hr />
-<h3 id="5-error-while-running-application"><a href="5-running-error/">5. error while running application</a></h3>
+                <h1 id="media">media</h1>
+<h2 id="install-gstreamer">install gstreamer</h2>
+<ul>
+<li>official link: https://gstreamer.freedesktop.org</li>
+<li>link for arch: https://wiki.archlinux.org/index.php/GStreamer</li>
+<li>install (pacman -S xxx): gstreamer, gst-libav, gst-plugin-good</li>
+<li>for video</li>
+</ul>
+<pre><code>see: https://aur.archlinux.org/packages/gst-plugin-libde25 for gst-plugin-libde265
+git clone https://github.com/strukturag/gstreamer-libde265
+./autogen.sh
+./configure --prefix=/usr
+make
+make install
+
+pacman -S libde265
+</code></pre>
+
+<ul>
+<li>for high speed, install gstreamer-vaapi</li>
+</ul>
+<h2 id="config">config</h2>
+<ul>
+<li>append <code>multimedia</code> and <code>multimediawidgets</code> (if you want to play video) to <code>QT += core gui</code> in <code>project.pro</code> firstly.</li>
+<li><code>#include &lt;QMediaPlayer&gt;</code></li>
+<li><code>#include &lt;QVideoWidget&gt;</code> // if you want to play video</li>
+<li><code>#include &lt;QMediaPlaylist</code> // if you want to play media list</li>
+<li>add data member in class</li>
+</ul>
+<pre><code>QMediaPlayer player;
+QVideoWidget videoWidget; // if you want to play video
+QMediaPlaylist list; // if you want to play media list
+</code></pre>
+
+<ul>
+<li>add 3 buttons to <code>Open</code> &amp; <code>Pause</code> &amp; <code>Stop</code></li>
+</ul>
+<h2 id="slots-for-example">slots for example</h2>
+<pre><code>#include &quot;mainwindow.h&quot;
+#include &quot;ui_mainwindow.h&quot;
+
+#include &lt;QStringList&gt;
+#include &lt;QFileDialog&gt;
+#include &lt;QUrl&gt;
+#include &lt;QDir&gt;
+#include &lt;QMessageBox&gt;
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui-&gt;setupUi(this);
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+void MainWindow::on_pushButtonOpen_clicked()
+{
+#if 0
+    // for open mp4 media list
+    QStringList fileList = QFileDialog::getOpenFileNames(this, tr(&quot;Open meida files&quot;), QDir::currentPath(), &quot;Media files(*.mp3 *.mp4)&quot;);
+    if (!fileList.isEmpty()) {
+        QStringList::const_iterator const_iterator;
+        for (const_iterator = fileList.constBegin();
+             const_iterator != fileList.constEnd();
+             const_iterator ++) {
+            list.addMedia(QUrl::fromLocalFile(*const_iterator));
+        }
+        list.setCurrentIndex(1);
+        player.setPlaylist(&amp;list);
+        player.setVolume(40);
+        player.setVideoOutput(&amp;videoWidget);
+        videoWidget.show();
+        player.play();
+#endif
+    QString file = QFileDialog::getOpenFileName(this, tr(&quot;Open meida file&quot;), QDir::currentPath(), &quot;Media files(*.mp3 *.mp4)&quot;);
+    if (!file.isEmpty()) {
+        // only special media
+        player.setMedia(QUrl::fromLocalFile(file));
+        player.setVolume(40);
+        if (file.endsWith(&quot;mp3&quot;, Qt::CaseInsensitive)) {
+            player.play();
+        } else if (file.endsWith(&quot;mp4&quot;, Qt::CaseInsensitive)) {
+            player.setVideoOutput(&amp;videoWidget);
+            videoWidget.show();
+            videoWidget.setFullScreen(false);
+            player.play();
+        } else {
+            QMessageBox::information(this, tr(&quot;Formation&quot;), tr(&quot;Formation invalid&quot;));
+        }
+    }
+}
+
+void MainWindow::on_pushButtonStop_clicked()
+{
+    player.stop();
+}
+
+void MainWindow::on_pushButtonPause_clicked()
+{
+    player.pause();
+}
+</code></pre>
               
             </div>
           </div>
@@ -166,8 +259,3 @@
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-04-05 10:58:10
--->

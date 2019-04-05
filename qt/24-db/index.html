@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>database - Hiechoer</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "database";
+    var mkdocs_page_input_path = "qt/24-db.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Hiechoer</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Blog</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../">Qt</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../cpp/">C++</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../python/">Python</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../misc/">Misc</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../other/">Other</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../about/">Find Us</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Hiechoer</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>database</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="database">database</h1>
+<hr />
+<h3 id="qt-sql-in-qmake"><code>QT += sql</code> in <code>qmake</code></h3>
+<h3 id="description">Description</h3>
+<p>Search <code>QSql</code></p>
+<h3 id="fix-problems-about-qpsql-driver-not-loaded-but-it-is-available">Fix problems about <code>QPSQL driver not loaded but it is available</code></h3>
+<h4 id="error-log">error log</h4>
+<pre><code>QSqlDatabase: QPSQL driver not loaded
+QSqlDatabase: available drivers: QSQLITE QMYSQL QMYSQL3 QODBC QODBC3 QPSQL QPSQL7
+</code></pre>
+
+<h4 id="check-with-ldd">check with ldd</h4>
+<p>We can see that libpq.so.5 was not found.</p>
+<pre><code>[hiechoer@hiechoer-pc ~]$ ls -al .Qt/5.13.0/gcc_64/plugins/sqldrivers/libqsqlpsql.so
+-rwxrwxr-x 1 hiechoer hiechoer 115056 3月  12 07:16 .Qt/5.13.0/gcc_64/plugins/sqldrivers/libqsqlpsql.so
+[hiechoer@hiechoer-pc ~]$ ls -al .Qt/Tools/QtCreator/lib/Qt/plugins/sqldrivers/libqsqlpsql.so 
+-rwxrwxr-x 1 hiechoer hiechoer 112440 2月  28 23:40 .Qt/Tools/QtCreator/lib/Qt/plugins/sqldrivers/libqsqlpsql.so
+[hiechoer@hiechoer-pc ~]$ ldd .Qt/5.13.0/gcc_64/plugins/sqldrivers/libqsqlpsql.so             
+        linux-vdso.so.1 (0x00007ffe07752000)
+        libQt5Sql.so.5 =&gt; /home/hiechoer/.Qt/5.13.0/gcc_64/plugins/sqldrivers/../../lib/libQt5Sql.so.5 (0x00007ff831d41000)
+        libQt5Core.so.5 =&gt; /home/hiechoer/.Qt/5.13.0/gcc_64/plugins/sqldrivers/../../lib/libQt5Core.so.5 (0x00007ff831599000)
+        libpthread.so.0 =&gt; /usr/lib/libpthread.so.0 (0x00007ff831545000)
+        libpq.so.5 =&gt; not found
+        libstdc++.so.6 =&gt; /usr/lib/libstdc++.so.6 (0x00007ff8313b6000)
+        libm.so.6 =&gt; /usr/lib/libm.so.6 (0x00007ff831231000)
+        libgcc_s.so.1 =&gt; /usr/lib/libgcc_s.so.1 (0x00007ff831215000)
+        libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007ff831051000)
+        libz.so.1 =&gt; /usr/lib/libz.so.1 (0x00007ff830e3a000)
+        libicui18n.so.56 =&gt; /home/hiechoer/.Qt/5.13.0/gcc_64/plugins/sqldrivers/../../lib/libicui18n.so.56 (0x00007ff8309a1000)
+        libicuuc.so.56 =&gt; /home/hiechoer/.Qt/5.13.0/gcc_64/plugins/sqldrivers/../../lib/libicuuc.so.56 (0x00007ff8305e9000)
+        libicudata.so.56 =&gt; /home/hiechoer/.Qt/5.13.0/gcc_64/plugins/sqldrivers/../../lib/libicudata.so.56 (0x00007ff82ec06000)
+        libdl.so.2 =&gt; /usr/lib/libdl.so.2 (0x00007ff82ebff000)
+        libgthread-2.0.so.0 =&gt; /usr/lib/libgthread-2.0.so.0 (0x00007ff82ebfa000)
+        libglib-2.0.so.0 =&gt; /usr/lib/libglib-2.0.so.0 (0x00007ff82ead7000)
+        /usr/lib64/ld-linux-x86-64.so.2 (0x00007ff8321a0000)
+        libpcre.so.1 =&gt; /usr/lib/libpcre.so.1 (0x00007ff82ea64000)
+[hiechoer@hiechoer-pc ~]$ ldd .Qt/Tools/QtCreator/lib/Qt/plugins/sqldrivers/libqsqlpsql.so 
+        linux-vdso.so.1 (0x00007ffdc97d6000)
+        libQt5Sql.so.5 =&gt; /home/hiechoer/.Qt/Tools/QtCreator/lib/Qt/plugins/sqldrivers/../../lib/libQt5Sql.so.5 (0x00007f76dab4f000)
+        libQt5Core.so.5 =&gt; /home/hiechoer/.Qt/Tools/QtCreator/lib/Qt/plugins/sqldrivers/../../lib/libQt5Core.so.5 (0x00007f76da3bc000)
+        libpthread.so.0 =&gt; /usr/lib/libpthread.so.0 (0x00007f76da368000)
+        libpq.so.5 =&gt; not found
+        libstdc++.so.6 =&gt; /usr/lib/libstdc++.so.6 (0x00007f76da1d9000)
+        libm.so.6 =&gt; /usr/lib/libm.so.6 (0x00007f76da054000)
+        libgcc_s.so.1 =&gt; /usr/lib/libgcc_s.so.1 (0x00007f76da038000)
+        libc.so.6 =&gt; /usr/lib/libc.so.6 (0x00007f76d9e74000)
+        libz.so.1 =&gt; /usr/lib/libz.so.1 (0x00007f76d9c5d000)
+        libicui18n.so.56 =&gt; /home/hiechoer/.Qt/Tools/QtCreator/lib/Qt/plugins/sqldrivers/../../lib/libicui18n.so.56 (0x00007f76d97c4000)
+        libicuuc.so.56 =&gt; /home/hiechoer/.Qt/Tools/QtCreator/lib/Qt/plugins/sqldrivers/../../lib/libicuuc.so.56 (0x00007f76d940c000)
+        libicudata.so.56 =&gt; /home/hiechoer/.Qt/Tools/QtCreator/lib/Qt/plugins/sqldrivers/../../lib/libicudata.so.56 (0x00007f76d7a29000)
+        libdl.so.2 =&gt; /usr/lib/libdl.so.2 (0x00007f76d7a22000)
+        libgthread-2.0.so.0 =&gt; /usr/lib/libgthread-2.0.so.0 (0x00007f76d7a1d000)
+        libglib-2.0.so.0 =&gt; /usr/lib/libglib-2.0.so.0 (0x00007f76d78fa000)
+        /usr/lib64/ld-linux-x86-64.so.2 (0x00007f76dafae000)
+        libpcre.so.1 =&gt; /usr/lib/libpcre.so.1 (0x00007f76d7887000)
+[hiechoer@hiechoer-pc ~]$
+[hiechoer@hiechoer-pc ~]$ ls .Qt/5.13.0/Src/qtbase/src/plugins/sqldrivers/psql
+main.cpp  psql.json  psql.pro  qsql_psql.cpp  qsql_psql_p.h  README
+[hiechoer@hiechoer-pc ~]$
+</code></pre>
+
+<h4 id="install-postgresql">install postgresql</h4>
+<ul>
+<li>Command: pacman -S postgresql, pacman -S postgresql-libs, pacman -S postgresql-docs</li>
+</ul>
+<h4 id="if-something-wrong-when-install-postgresql-set-chinese-source-firstly">if something wrong when install postgresql, set Chinese source firstly</h4>
+<ul>
+<li>pacman-mirrors -i -c China -m rank</li>
+<li>pacman -Syy</li>
+<li>pacman -S archlinux-keyring</li>
+<li>edit /etc/pacman.conf, append:</li>
+</ul>
+<pre><code>[archlinuxcn]
+SigLevel = Optional TrustedOnly
+Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
+</code></pre>
+
+<h4 id="config-postgresql">config postgresql</h4>
+<p>See: <code>https://wiki.archlinux.org/index.php/PostgreSQL</code></p>
+<ul>
+<li>enter postgres user: <code>su, su -l postgres</code> or <code>sudo -iu postgres</code></li>
+<li>initdb -D /var/lib/postgres/data, at last you will see the following:</li>
+</ul>
+<pre><code>WARNING: enabling &quot;trust&quot; authentication for local connections
+You can change this by editing pg_hba.conf or using the option -A, or
+--auth-local and --auth-host, the next time you run initdb.
+
+Success. You can now start the database server using:
+
+    pg_ctl -D /var/lib/postgres/data -l logfile start
+</code></pre>
+
+<ul>
+<li>return to the regular user(not root user): exit</li>
+<li>start service: systemctl start postgresql.service</li>
+<li>enable service to start the service when boot os: systemctl enable postgresql.service</li>
+<li><code>if you want to stop the service: systemctl stop postgresql.service</code></li>
+<li>login with <code>sudo -iu postgres</code></li>
+<li>creater new user:</li>
+</ul>
+<pre><code>[hiechoer@hiechoer-pc ~]$ sudo -iu postgres
+[postgres@hiechoer-pc ~]$ createuser --interactive
+Enter name of role to add: hiechoer &lt;=== the same name as linux login user
+Shall the new role be a superuser? (y/n) n
+Shall the new role be allowed to create databases? (y/n) y
+Shall the new role be allowed to create more new roles? (y/n) y
+[postgres@hiechoer-pc ~]$
+</code></pre>
+
+<ul>
+<li>return to the regular user</li>
+<li>create database:</li>
+</ul>
+<p><code>[hiechoer@hiechoer-pc ~]$ createdb mytestdb</code></p>
+<h4 id="config-listen-addresses">config listen addresses</h4>
+<p>edit <code>var/lib/postgresql/data/postgresql.conf</code>, update to <code>listen_addresses='*'</code>, then reboot the service</p>
+<h4 id="configure-postgresql-to-be-accessible-from-remote-hosts">configure PostgreSQL to be accessible from remote hosts</h4>
+<p>edit <code>/var/lib/postgresql/data/pg_hba.conf</code>, add one line: <code>host mytestdb hiechoer 192.168.0.0/16 trust</code>, then reboot the service</p>
+<h4 id="some-useful-postgresql-commands">some useful postgresql commands</h4>
+<ul>
+<li>login to db (mytestdb) with special user (hiechoer) and quit:</li>
+</ul>
+<pre><code>[hiechoer@hiechoer-pc ~]$ psql mytestdb hiechoer
+psql (11.1)
+Type &quot;help&quot; for help.
+
+mytestdb=&gt; quit
+[hiechoer@hiechoer-pc ~]$
+</code></pre>
+
+<ul>
+<li>create and drop table</li>
+</ul>
+<pre><code>create table TESTCASE(
+id INTEGER, 
+task_class INTEGER,
+age TEXT,
+PRIMARY KEY(id, task_class)
+);
+
+create table CREATETASK_CHKID_N( 
+id SERIAL PRIMARY KEY, 
+chk_id TEXT, 
+n INTEGER
+);
+
+drop table REL_CROSS_NODE;
+
+For example:
+mytestdb=&gt; create table mytesttab(
+mytestdb(&gt; id SERIAL PRIMARY KEY,
+mytestdb(&gt; name TEXT,
+mytestdb(&gt; age INTEGER
+mytestdb(&gt; );
+CREATE TABLE
+mytestdb=&gt;
+</code></pre>
+
+<ul>
+<li>check users</li>
+</ul>
+<pre><code>mytestdb=&gt; \du
+                                   List of roles
+ Role name |                         Attributes                         | Member of 
+-----------+------------------------------------------------------------+-----------
+ hiechoer  | Create role, Create DB                                     | {}
+ postgres  | Superuser, Create role, Create DB, Replication, Bypass RLS | {}
+
+mytestdb=&gt;
+</code></pre>
+
+<ul>
+<li>list table(s)</li>
+</ul>
+<pre><code>mytestdb=&gt; \dt
+           List of relations
+ Schema |   Name    | Type  |  Owner   
+--------+-----------+-------+----------
+ public | mytesttab | table | hiechoer
+(1 row)
+
+mytestdb=&gt;
+</code></pre>
+
+<ul>
+<li>describe table</li>
+</ul>
+<pre><code>mytestdb=&gt; \d mytesttab
+                            Table &quot;public.mytesttab&quot;
+ Column |  Type   | Collation | Nullable |                Default                
+--------+---------+-----------+----------+---------------------------------------
+ id     | integer |           | not null | nextval('mytesttab_id_seq'::regclass)
+ name   | text    |           |          | 
+ age    | integer |           |          | 
+Indexes:
+    &quot;mytesttab_pkey&quot; PRIMARY KEY, btree (id)
+
+mytestdb=&gt;
+mytestdb=&gt; \d+ mytesttab
+                                                Table &quot;public.mytesttab&quot;
+ Column |  Type   | Collation | Nullable |                Default                | Storage  | Stats target | Description 
+--------+---------+-----------+----------+---------------------------------------+----------+--------------+-------------
+ id     | integer |           | not null | nextval('mytesttab_id_seq'::regclass) | plain    |              | 
+ name   | text    |           |          |                                       | extended |              | 
+ age    | integer |           |          |                                       | plain    |              | 
+Indexes:
+    &quot;mytesttab_pkey&quot; PRIMARY KEY, btree (id)
+
+mytestdb=&gt;
+</code></pre>
+
+<ul>
+<li>information of connection(s)</li>
+</ul>
+<pre><code>mytestdb=&gt; select * from pg_stat_activity
+</code></pre>
+
+<ul>
+<li>insert:</li>
+</ul>
+<pre><code>mytestdb=&gt; insert into mytesttab (name, age) values ('zhangsan', 28);
+INSERT 0 1
+mytestdb=&gt; select * from mytesttab;
+ id |   name   | age 
+----+----------+-----
+  1 | zhangsan |  28
+(1 row)
+
+mytestdb=&gt;
+</code></pre>
+
+<ul>
+<li>delete: <code>delete from mytesttab where name='zhangsan'</code></li>
+<li>update: <code>update mytesttab set name='lisi' where name='zhangsan'</code></li>
+<li>select: <code>select * from mytesttab</code></li>
+</ul>
+<h3 id="include">Include</h3>
+<p><code>#include &lt;QtSql&gt;</code></p>
+<h3 id="widgets">Widgets</h3>
+<ul>
+<li>1 QTextEdit</li>
+<li>1 QLineEdit</li>
+<li>2 QSpinBox (1 for insert age, 1 for delete id)</li>
+<li>4 QPushButton (1 insert, 1 delete, 1 select, 1 quit)</li>
+</ul>
+<h3 id="header">Header</h3>
+<pre><code>#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include &lt;QMainWindow&gt;
+
+#include &lt;QtSql&gt;
+
+namespace Ui {
+class MainWindow;
+}
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+
+private slots:
+    void on_pushButtonShow_clicked();
+
+    void on_pushButtonInsert_clicked();
+
+    void on_pushButtonDelete_clicked();
+
+private:
+    Ui::MainWindow *ui;
+    QSqlDatabase db;
+};
+
+#endif // MAINWINDOW_H
+</code></pre>
+
+<h3 id="cpp">Cpp</h3>
+<pre><code>#include &quot;mainwindow.h&quot;
+#include &quot;ui_mainwindow.h&quot;
+
+#include &lt;QMessageBox&gt;
+#include &lt;QSqlDatabase&gt;
+#include &lt;QDebug&gt;
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui-&gt;setupUi(this);
+
+    db = QSqlDatabase::addDatabase(&quot;QPSQL&quot;);
+    db.setHostName(&quot;localhost&quot;);
+    db.setDatabaseName(&quot;mytestdb&quot;);
+    db.setUserName(&quot;hiechoer&quot;);
+    db.setPassword(&quot;breizh&quot;);
+    bool ok = db.open();
+    if (!ok) {
+        QMessageBox::information(this, tr(&quot;open fail&quot;), tr(&quot;open fail&quot;));
+        return;
+    }
+}
+
+MainWindow::~MainWindow()
+{
+    db.close();
+    delete ui;
+}
+
+void MainWindow::on_pushButtonShow_clicked()
+{
+    ui-&gt;textEditShow-&gt;clear();
+    QSqlQuery query;
+    query.prepare(&quot;select * from mytesttab&quot;);
+    query.exec();
+    while (query.next()) {
+        int mid = query.value(0).toInt();
+        QString mname = query.value(1).toString();
+        int mage = query.value(2).toInt();
+        ui-&gt;textEditShow-&gt;append(QString(&quot;id: %1, name: %2, age: %3&quot;).arg(mid).arg(mname).arg(mage));
+    }
+}
+
+void MainWindow::on_pushButtonInsert_clicked()
+{
+    if (ui-&gt;lineEditName-&gt;text().isEmpty()) {
+        QMessageBox::information(this, tr(&quot;name empty&quot;), tr(&quot;name cann't be empty&quot;));
+        return;
+    }
+    QSqlQuery query;
+    query.prepare(&quot;insert into mytesttab (name, age) &quot;
+                  &quot;values (:name, :age)&quot;);
+    query.bindValue(&quot;:name&quot;, ui-&gt;lineEditName-&gt;text());
+    query.bindValue(&quot;:age&quot;, ui-&gt;spinBoxAge-&gt;value());
+    query.exec();
+    ui-&gt;lineEditName-&gt;clear();
+    ui-&gt;spinBoxAge-&gt;setValue(18);
+    ui-&gt;textEditShow-&gt;clear();
+}
+
+void MainWindow::on_pushButtonDelete_clicked()
+{
+    QSqlQuery query;
+    query.prepare(&quot;delete from mytesttab &quot;
+                  &quot;where id=:id&quot;);
+    query.bindValue(&quot;:id&quot;, ui-&gt;spinBoxId-&gt;value());
+    query.exec();
+    ui-&gt;spinBoxId-&gt;setValue(0);
+    ui-&gt;textEditShow-&gt;clear();
+}
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>

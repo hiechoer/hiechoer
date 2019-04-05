@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>Dialog - Hiechoer</title>
+  <title>grab window - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Dialog";
-    var mkdocs_page_input_path = "qt/5-dialog.md";
+    var mkdocs_page_name = "grab window";
+    var mkdocs_page_input_path = "qt/21-grabwin.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -107,7 +107,7 @@
     
       
     
-    <li>Dialog</li>
+    <li>grab window</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,109 +117,170 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="dialog">Dialog</h1>
+                <h1 id="grab-window">grab window</h1>
 <hr />
-<h3 id="qmessagebox">QMessageBox</h3>
-<h4 id="5-static-interfaces">5 static interfaces:</h4>
+<h3 id="componments">Componments</h3>
 <ul>
-<li>critical</li>
-<li>warning</li>
-<li>question</li>
-<li>information</li>
-<li>about</li>
+<li>1 label</li>
+<li>1 groupbox (1 label, 1 spinbox, 1 checkbox)</li>
+<li>3 pushbuttons (1 grab, 1 save, 1 quit)</li>
 </ul>
-<pre><code>if (QMessageBox::Ok == QMessageBox::information(NULL,
-                                                tr(&quot;Open&quot;),
-                                                tr(&quot;Open a file&quot;),
-                                                QMessageBox::Ok | QMessageBox::Cancel)) {
-    //
-} else {
-    //
-}
-</code></pre>
-
-<h4 id="constructor">constructor</h4>
-<pre><code>QMessageBox msg(QMessageBox::NoIcon, tr(&quot;title&quot;), tr(&quot;content&quot;));
-msg.setIconPixmap(QPixmap(&quot;:/open.png&quot;));
-if (QMessageBox::Ok == msg.exec()) {}
-</code></pre>
-
-<h3 id="qfiledialog">QFileDialog</h3>
-<h4 id="static-interface">static interface</h4>
+<h3 id="description">Description</h3>
 <ul>
-<li>getOpenFileName</li>
-<li>getSaveFileName</li>
-<li>getOpenFileNames</li>
+<li>we can play video by continue to grab and show some pictures (for example 5 pics / 1 minute)</li>
+<li>overload contextMenuEvent from QWidget to right-click menu</li>
 </ul>
-<pre><code>QString path = QFileDialog::getOpenFileName(this, tr(&quot;title&quot;), &quot;.&quot;, tr(&quot;png(*.png);; jpg(*.jpg)&quot;));
-//QString path = QFileDialog::getOpenFileName(this, tr(&quot;title&quot;), &quot;.&quot;, tr(&quot;png jpg(*.png *.jpg)&quot;));
-if (path.length()) {
-    QMessageBox::information(NULL, tr(&quot;path&quot;), tr(&quot;path: &quot;) + path);
-} else {
-    QMessageBox::information(NULL, tr(&quot;path&quot;), tr(&quot;no selected&quot;));
+<h3 id="header">Header</h3>
+<pre><code>#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include &lt;QMainWindow&gt;
+#include &lt;QTimer&gt;
+#include &lt;QScreen&gt;
+#include &lt;QPixmap&gt;
+
+// For right-click menu (Save as on pixmap)
+#include &lt;QContextMenuEvent&gt;
+
+namespace Ui {
+class MainWindow;
 }
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+
+private slots:
+    void on_pushButtonQuit_clicked();
+
+    void on_pushButtonGrab_clicked();
+
+    void timeoutForGrab();
+
+    void on_pushButtonSave_clicked();
+
+    // For right-click menu
+    void grabSaveAsAction();
+
+private:
+    Ui::MainWindow *ui;
+    QTimer *timer;
+    QScreen *screen;
+    QPixmap pixmap;
+
+    // For right-click menu, use data member to avoid memory
+    QMenu *menu;
+    QAction *actionSaveAs;
+
+private:
+    void saveGrabToClipboard();
+
+protected:
+    // For right-click menu
+    void contextMenuEvent(QContextMenuEvent *event);
+};
+
+#endif // MAINWINDOW_H
 </code></pre>
 
-<h4 id="constructor_1">constructor</h4>
-<pre><code>QFileDialog *dlg = new QFileDialog(this);
-dlg-&gt;setWindowTitle(tr(&quot;Open&quot;));
-dlg-&gt;setDirectory(&quot;.&quot;);
-dlg-&gt;setNameFilter(tr(&quot;Images (*.png *jpg)&quot;));
-if (QFileDialog::Accepted == dlg-&gt;exec()) {
-    QMessageBox::information(NULL, tr(&quot;path&quot;), tr(&quot;path: &quot;) + dlg-&gt;selectedFiles()[0]);
-} else {
-    QMessageBox::information(NULL, tr(&quot;path&quot;), tr(&quot;no selected&quot;));
+<h3 id="cpp">Cpp</h3>
+<pre><code>#include &quot;mainwindow.h&quot;
+#include &quot;ui_mainwindow.h&quot;
+
+#include &lt;QMessageBox&gt;
+#include &lt;QScreen&gt;
+#include &lt;QPixmap&gt;
+#include &lt;QDesktopWidget&gt;
+#include &lt;QFileDialog&gt;
+
+#include &lt;QDesktopServices&gt;
+#include &lt;QStandardPaths&gt;
+#include &lt;QClipboard&gt;
+
+// For right-click menu
+#include &lt;QMenu&gt;
+#include &lt;QAction&gt;
+#include &lt;QCursor&gt;
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui-&gt;setupUi(this);
+    timer = new QTimer;
+    screen = QApplication::primaryScreen();
+
+    menu = new QMenu(this);
+    actionSaveAs = new QAction(this);
+    actionSaveAs-&gt;setText(tr(&quot;Save as&quot;));
+    connect(actionSaveAs, SIGNAL(triggered()), this, SLOT(grabSaveAsAction()));
+    menu-&gt;addAction(actionSaveAs);
 }
-</code></pre>
 
-<h3 id="qinputdialog">QInputDialog</h3>
-<h4 id="static-interface_1">static interface</h4>
-<ul>
-<li>getText</li>
-<li>getInteger</li>
-<li>getDouble</li>
-<li>getItem</li>
-</ul>
-<pre><code>bool ok;
-QString text = QInputDialog::getText(this, tr(&quot;title&quot;), tr(&quot;Input&quot;), QLineEdit::Normal, tr(&quot;default string&quot;), &amp;ok);
-if (ok) {
-        QMessageBox::information(NULL, tr(&quot;path&quot;), tr(&quot;input text: &quot;) + text);
-} else {
-        QMessageBox::information(NULL, tr(&quot;path&quot;), tr(&quot;no input&quot;));
+MainWindow::~MainWindow()
+{
+    delete timer;
+    delete screen;
+    delete actionSaveAs;
+    delete menu;
+    delete ui;
 }
-</code></pre>
 
-<h3 id="qfontdialog">QFontDialog</h3>
-<h4 id="static-interface_2">static interface</h4>
-<ul>
-<li>getFont</li>
-</ul>
-<pre><code>#include &lt;QFont&gt;
-#include &lt;QFontDialog&gt;
+void MainWindow::on_pushButtonQuit_clicked()
+{
+    this-&gt;close();
+}
 
-void MainWindow::editFont() {
-    bool ok;
-    QFont font = QFontDialog::getFont(&amp;ok, this);
-    if (ok) {
-        ui-&gt;textEdit-&gt;setFont(font);
+void MainWindow::on_pushButtonGrab_clicked()
+{
+    if (ui-&gt;checkBoxEnabled-&gt;isChecked()) {
+        connect(this-&gt;timer, SIGNAL(timeout()), this, SLOT(timeoutForGrab()));
+        this-&gt;hide();
+        this-&gt;timer-&gt;start(ui-&gt;spinBoxTimerValue-&gt;value() * 1000);
     } else {
+        // grab myself too.
+        qApp-&gt;beep();
+        pixmap = screen-&gt;grabWindow(QApplication::desktop()-&gt;winId());
+        ui-&gt;labelShow-&gt;setPixmap(pixmap.scaled(ui-&gt;labelShow-&gt;size()));
+        saveGrabToClipboard();
     }
 }
-</code></pre>
 
-<h3 id="qcolordialog">QColorDialog</h3>
-<h4 id="static-interface_3">static interface</h4>
-<ul>
-<li>getColor</li>
-</ul>
-<pre><code>#include &lt;QColor&gt;
-#include &lt;QColorDialog&gt;
+void MainWindow::timeoutForGrab() {
+    qApp-&gt;beep();
+    pixmap = screen-&gt;grabWindow(QApplication::desktop()-&gt;winId());
+    ui-&gt;labelShow-&gt;setPixmap(pixmap.scaled(ui-&gt;labelShow-&gt;size()));
+    this-&gt;show();
+    this-&gt;timer-&gt;stop();
+    saveGrabToClipboard();
+}
 
-void MainWindow::editColor() {
-    QColor color = QColorDialog::getColor(Qt::red, this, tr(&quot;get color&quot;));
-    if (color.isValid()) {
-        ui-&gt;textEdit-&gt;setTextColor(color);
-    }
+void MainWindow::on_pushButtonSave_clicked()
+{
+    QString name = QFileDialog::getSaveFileName(this,
+                                                tr(&quot;Save pic&quot;),
+                                                QStandardPaths::writableLocation(QStandardPaths::PicturesLocation));
+    pixmap.save(name);
+}
+
+void MainWindow::saveGrabToClipboard() {
+    QClipboard *clipboard = QApplication::clipboard();
+    clipboard-&gt;setPixmap(this-&gt;pixmap);
+}
+
+/* For right-click menu { */
+void MainWindow::contextMenuEvent(QContextMenuEvent *event) {
+    menu-&gt;exec(QCursor::pos());
+}
+
+/* } */
+
+void MainWindow::grabSaveAsAction() {
+    on_pushButtonSave_clicked();
 }
 </code></pre>
               

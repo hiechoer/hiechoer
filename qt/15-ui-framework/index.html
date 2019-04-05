@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>framework - Hiechoer</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "framework";
+    var mkdocs_page_input_path = "qt/15-ui-framework.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Hiechoer</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Blog</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../">Qt</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../cpp/">C++</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../python/">Python</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../misc/">Misc</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../other/">Other</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../about/">Find Us</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Hiechoer</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>framework</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="framework">framework</h1>
+<h2 id="project-if-generate-form-ui">project if generate form ui</h2>
+<h3 id="codes">codes</h3>
+<h4 id="mainwindowh">mainwindow.h</h4>
+<pre><code>#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include &lt;QMainWindow&gt;
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    MainWindow(QWidget *parent = 0);
+    ~MainWindow();
+};
+
+#endif // MAINWINDOW_H
+</code></pre>
+
+<h4 id="mainwindowcpp">mainwindow.cpp</h4>
+<pre><code>#include &quot;mainwindow.h&quot;
+
+MainWindow::MainWindow(QWidget *parent)
+    : QMainWindow(parent)
+{
+}
+
+MainWindow::~MainWindow()
+{
+
+}
+</code></pre>
+
+<h4 id="maincpp">main.cpp</h4>
+<pre><code>#include &quot;mainwindow.h&quot;
+#include &lt;QApplication&gt;
+
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.show();
+
+    return a.exec();
+}
+</code></pre>
+
+<h2 id="project-if-no-generate-form-ui">project if no generate form ui</h2>
+<h3 id="codes_1">codes</h3>
+<h4 id="mainwindowh_1">mainwindow.h</h4>
+<pre><code>#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include &lt;QMainWindow&gt;
+
+namespace Ui {
+class MainWindow;
+}
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+
+private:
+    Ui::MainWindow *ui;
+};
+
+#endif // MAINWINDOW_H
+</code></pre>
+
+<h4 id="mainwindowcpp_1">mainwindow.cpp</h4>
+<pre><code>#include &quot;mainwindow.h&quot;
+#include &quot;ui_mainwindow.h&quot;
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui-&gt;setupUi(this);
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+</code></pre>
+
+<h4 id="mainwindowui">mainwindow.ui</h4>
+<pre><code>&lt;ui version=&quot;4.0&quot;&gt;
+ &lt;class&gt;MainWindow&lt;/class&gt;
+ &lt;widget class=&quot;QMainWindow&quot; name=&quot;MainWindow&quot; &gt;
+  &lt;property name=&quot;geometry&quot; &gt;
+   &lt;rect&gt;
+    &lt;x&gt;0&lt;/x&gt;
+    &lt;y&gt;0&lt;/y&gt;
+    &lt;width&gt;400&lt;/width&gt;
+    &lt;height&gt;300&lt;/height&gt;
+   &lt;/rect&gt;
+  &lt;/property&gt;
+  &lt;property name=&quot;windowTitle&quot; &gt;
+   &lt;string&gt;MainWindow&lt;/string&gt;
+  &lt;/property&gt;
+  &lt;widget class=&quot;QMenuBar&quot; name=&quot;menuBar&quot; /&gt;
+  &lt;widget class=&quot;QToolBar&quot; name=&quot;mainToolBar&quot; /&gt;
+  &lt;widget class=&quot;QWidget&quot; name=&quot;centralWidget&quot; /&gt;
+  &lt;widget class=&quot;QStatusBar&quot; name=&quot;statusBar&quot; /&gt;
+ &lt;/widget&gt;
+ &lt;layoutDefault spacing=&quot;6&quot; margin=&quot;11&quot; /&gt;
+ &lt;pixmapfunction&gt;&lt;/pixmapfunction&gt;
+ &lt;resources/&gt;
+ &lt;connections/&gt;
+&lt;/ui&gt;
+</code></pre>
+
+<h4 id="maincpp_1">main.cpp</h4>
+<pre><code>#include &quot;mainwindow.h&quot;
+#include &lt;QApplication&gt;
+
+int main(int argc, char *argv[])
+{
+    QApplication a(argc, argv);
+    MainWindow w;
+    w.show();
+
+    return a.exec();
+}
+</code></pre>
+
+<h3 id="explaination">explaination</h3>
+<ul>
+<li><code>mainwindow.ui</code> is a xml file, it generated with ui designer. When you edit widgets or signal/slot, qtcreator will update this file for some nodes.</li>
+<li>build the project, qtcreator generate <code>moc_mainwindow.cpp</code> &amp; <code>moc_predefs.h</code> &amp; <code>ui_mainwindow.h</code>, <code>ui_mainwindow.h</code> is generated based on <code>mainwind.ui</code></li>
+<li>in <code>ui_mainwindow.h</code>, it define <code>class Ui_MainWindow</code> and <code>namespace Ui</code>, then define <code>class MainWindow</code> in <code>namespace Ui</code>, it is a sub-class of <code>Ui_MainWindow</code></li>
+<li>there is a public member function in <code>Ui::MainWindow</code>, the prototype is <code>void Ui::MainWindow setupUi(QMainWindow *MainWindow);</code>, this interface will setup widgets to parameter <code>MainWindow</code> based on <code>mainwindow.ui</code></li>
+<li>in <code>mainwindow.h</code>, it define <code>class MainWindow</code> inhert from <code>QMainWindow</code>, this class is different from <code>class Ui::MainWindow</code> defined in <code>ui_mainwindow.h</code>. There is private data member <code>Ui::MainWindow *ui</code> in <code>class MainWindow</code>.</li>
+<li>in <code>mainwindow.cpp</code>, call constructor of parent <code>class QMainWindow</code> and init data member ui by <code>new Ui::MainWindow</code> when realize constructor of <code>class MainWindow</code>, then call <code>ui-&gt;setupUi(this);</code></li>
+<li>in <code>Ui::MainWindows -&gt; setupUi</code>, it accept object of <code>class MainWindow</code>, then init widgets based on <code>mainwindow.ui</code> (xml file) for <code>this</code> pointer (object of <code>class MainWindow</code>).</li>
+<li>in <code>main.cpp</code>, it create a instance of <code>class MainWindow</code> and show it.</li>
+<li>then if you want to handle widgets of ui, you can <code>ui-&gt;xxx-&gt;fun()</code> in <code>class MainWindow</code>.</li>
+<li>you can exec: uic mainwindow.ui &gt; ui_mainwindow.h to generate new header file if some problems in it.</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>

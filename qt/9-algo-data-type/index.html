@@ -195,6 +195,16 @@ const char* a = qPrintable(QString(&quot;xxxxx&quot;));
 <pre><code>QIcon icon = var.value&lt;QIcon&gt;(); // 非GUI模块中和GUI模块中都适用
 int a = var.toInt(); // 非GUI模块中, toString, to...
 </code></pre>
+
+<h3 id="qdatetime">QDateTime</h3>
+<pre><code>#include &lt;QDateTime&gt;
+
+void MainWindow::editDateTimeSlot() {
+    QDateTime tm = QDateTime::currentDateTime();
+    QString current = tm.toString(&quot;hh:mm:ss (M-d-yyyy)&quot;);
+    ui-&gt;textEdit-&gt;append(current);
+}
+</code></pre>
               
             </div>
           </div>

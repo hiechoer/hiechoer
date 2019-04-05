@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="None">
+  
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>Qt: problems - Hiechoer</title>
+  <title>QListWidget - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Qt: problems";
-    var mkdocs_page_input_path = "qt/problems/index.md";
+    var mkdocs_page_name = "QListWidget";
+    var mkdocs_page_input_path = "qt/20-listwidget.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -107,7 +107,7 @@
     
       
     
-    <li>Qt: problems</li>
+    <li>QListWidget</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,19 +117,140 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="qt-problems">Qt: problems</h1>
+                <h1 id="qlistwidget">QListWidget</h1>
 <hr />
-<h3 id="0-misc"><a href="0-misc/">0. misc</a></h3>
-<hr />
-<h3 id="1-setcentralwidget-and-layout"><a href="1-centralwidget/">1. setCentralWidget and layout</a></h3>
-<hr />
-<h3 id="2-install-packages"><a href="2-install-packages/">2. install packages</a></h3>
-<hr />
-<h3 id="3-missing-packages"><a href="3-missing-packages/">3. missing packages</a></h3>
-<hr />
-<h3 id="4-not-enough-disk-space-to-store-temporary-files"><a href="4-disk-space-when-install/">4. not enough disk space to store temporary files!</a></h3>
-<hr />
-<h3 id="5-error-while-running-application"><a href="5-running-error/">5. error while running application</a></h3>
+<p>Add and remove item in QListWidget</p>
+<h3 id="include">Include</h3>
+<pre><code>#include &lt;QString&gt;
+#include &lt;QMessageBox&gt;
+#include &lt;QListWidgetItem&gt;
+#include &lt;QListWidget&gt;
+#inlcude &lt;QKeyEvent&gt;
+</code></pre>
+
+<h3 id="edit-in-mainwindowui">Edit in <code>mainwindow.ui</code></h3>
+<p>Add the following componments:</p>
+<ul>
+<li>1 QListWidget</li>
+<li>1 QLineEdit</li>
+<li>3 QPushButton(s), one for add, one for delete, on for show entries in directory</li>
+</ul>
+<h3 id="mainwindowh">mainwindow.h</h3>
+<pre><code>#ifndef MAINWINDOW_H
+#define MAINWINDOW_H
+
+#include &lt;QMainWindow&gt;
+#include &lt;QListWidgetItem&gt;
+
+namespace Ui {
+class MainWindow;
+}
+
+class MainWindow : public QMainWindow
+{
+    Q_OBJECT
+
+public:
+    explicit MainWindow(QWidget *parent = nullptr);
+    ~MainWindow();
+
+private slots:
+    void on_pushButtonAdd_clicked();
+
+    void on_pushButtonDelete_clicked();
+
+    void on_pushButtonShowDir_clicked();
+
+    void listWidgetCitiesDoubleClickedSlot(QListWidgetItem *item);
+
+private:
+    Ui::MainWindow *ui;
+
+protected:
+    virtual void keyPressEvent(QKeyEvent *event);
+};
+
+#endif // MAINWINDOW_H
+</code></pre>
+
+<h3 id="mainwindowcpp">mainwindow.cpp</h3>
+<pre><code>#include &quot;mainwindow.h&quot;
+#include &quot;ui_mainwindow.h&quot;
+
+#include &lt;QString&gt;
+#include &lt;QMessageBox&gt;
+#include &lt;QListWidgetItem&gt;
+#include &lt;QListWidget&gt;
+#include &lt;QKeyEvent&gt;
+
+#include &lt;QDir&gt;
+#include &lt;QStringList&gt;
+
+#include &lt;QMessageBox&gt;
+
+MainWindow::MainWindow(QWidget *parent) :
+    QMainWindow(parent),
+    ui(new Ui::MainWindow)
+{
+    ui-&gt;setupUi(this);
+    connect(ui-&gt;lineEditCity, SIGNAL(returnPressed()), this, SLOT(on_pushButtonAdd_clicked()));
+    connect(ui-&gt;listWidgetCities,
+            SIGNAL(itemDoubleClicked(QListWidgetItem *item)),
+            this,
+            SLOT(listWidgetCitiesDoubleClickedSlot(QListWidgetItem *item)));
+}
+
+MainWindow::~MainWindow()
+{
+    delete ui;
+}
+
+void MainWindow::on_pushButtonAdd_clicked()
+{
+    QString cityName = ui-&gt;lineEditCity-&gt;text();
+    if (cityName.isEmpty()) {
+        return;
+    }
+    if (!ui-&gt;listWidgetCities-&gt;findItems(cityName, Qt::MatchWildcard).isEmpty()) {
+        QMessageBox::information(this, tr(&quot;Duplicated item&quot;), QString(&quot;%1 is duplicated&quot;).arg(cityName));
+        return;
+    }
+    QListWidgetItem *item = new QListWidgetItem(cityName);
+    ui-&gt;listWidgetCities-&gt;addItem(item);
+    ui-&gt;lineEditCity-&gt;clear();
+}
+
+void MainWindow::on_pushButtonDelete_clicked()
+{
+    ui-&gt;listWidgetCities-&gt;removeItemWidget(ui-&gt;listWidgetCities-&gt;takeItem(ui-&gt;listWidgetCities-&gt;currentRow()));
+}
+
+void MainWindow::keyPressEvent(QKeyEvent *event) {
+    if (event-&gt;key() == Qt::Key_Delete) {
+        ui-&gt;listWidgetCities-&gt;removeItemWidget(ui-&gt;listWidgetCities-&gt;takeItem(ui-&gt;listWidgetCities-&gt;currentRow()));
+        return;
+    }
+    QWidget::keyPressEvent(event);
+}
+
+void MainWindow::on_pushButtonShowDir_clicked()
+{
+    ui-&gt;listWidgetCities-&gt;clear();
+    QDir dir = QDir::currentPath();
+    QStringList strList = dir.entryList();
+    QStringList::const_iterator citer = strList.constBegin();
+    while (citer != strList.constEnd()) {
+        if (!citer-&gt;startsWith(&quot;.&quot;) &amp;&amp; !citer-&gt;startsWith(&quot;..&quot;)) {
+            ui-&gt;listWidgetCities-&gt;addItem(*citer);
+        }
+        citer ++;
+    }
+}
+
+void MainWindow::listWidgetCitiesDoubleClickedSlot(QListWidgetItem *item) {
+    QMessageBox::information(this, tr(&quot;info&quot;), tr(&quot;information&quot;));
+}
+</code></pre>
               
             </div>
           </div>
@@ -166,8 +287,3 @@
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-04-05 10:58:10
--->

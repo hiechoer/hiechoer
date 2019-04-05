@@ -223,6 +223,10 @@ Updating 'mymainwind.ts'...
 <h3 id="click-file-release-then-save-in-linguist-tool-to-generate-mymainwindqm">Click <code>File</code>-&gt;<code>Release</code> then <code>Save</code> in linguist tool to generate mymainwind.qm</h3>
 <h3 id="copy-mymainwindqm-to-application-folder">copy mymainwind.qm to application folder</h3>
 <h3 id="run-your-application-you-will-see-the-results">run your application, you will see the results</h3>
+<h2 id="_1">如果代码中硬写中文, 可以用下面方法操作编码方式</h2>
+<pre><code>in main function:
+QTextCodec::setCodecForLocale(QTextCodec::codecForName(&quot;UTF-8&quot;));
+</code></pre>
               
             </div>
           </div>
