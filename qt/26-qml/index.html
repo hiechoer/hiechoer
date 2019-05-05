@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="None">
+  
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>Qt: Drag and Drop (DnD) - Hiechoer</title>
+  <title>qml - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Qt: Drag and Drop (DnD)";
-    var mkdocs_page_input_path = "qt/14-dnd/index.md";
+    var mkdocs_page_name = "qml";
+    var mkdocs_page_input_path = "qt/26-qml.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -107,7 +107,7 @@
     
       
     
-    <li>Qt: Drag and Drop (DnD)</li>
+    <li>qml</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,13 +117,16 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="qt-drag-and-drop-dnd">Qt: Drag and Drop (DnD)</h1>
-<hr />
-<h3 id="1-drag-text-file-to-widget"><a href="1-text-widget/">1. drag text file to widget</a></h3>
-<hr />
-<h3 id="2-clipboard"><a href="2-clipboard/">2. clipboard</a></h3>
-<hr />
-<h3 id="3-misc"><a href="3-misc/">3. misc</a></h3>
+                <h1 id="qml">qml</h1>
+<ul>
+<li><code>qmlscene a.qml</code> to show results quickly</li>
+<li>signal-slot to update property, Behaver on property to show animation</li>
+<li>XxxAnimation on an item aotumatelly</li>
+<li>signal-slot to update state, states to update to special state, transitions to update animation</li>
+<li>static view in mvc, for example: Column-Repeater, Column is view, Repeater is model and delegate, you can access <code>index</code> and <code>modelData</code>in delegate if you define model by <code>[]</code>, or access <code>property name</code> if you define model by <code>ListModel {ListElement {}}</code></li>
+<li>dynamic view in mvc, for example: ListView and GirdView, there are model and delegate in view, you can set delegate to a new <code>Component</code>, you can also use <code>index</code> and <code>modelData</code> if <code>number</code> or <code>[]</code> model, or <code>property name</code> if <code>ListModel {ListElement {}}</code> model. Both <code>ListView</code> and <code>GirdView</code> use <code>ListModel</code></li>
+<li>append and remove element on delegate object, onAdd &amp; onRemove in delegate to animate</li>
+</ul>
               
             </div>
           </div>
@@ -160,8 +163,3 @@
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-05-05 23:57:27
--->

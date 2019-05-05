@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="None">
+  
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>Qt: Drag and Drop (DnD) - Hiechoer</title>
+  <title>plugin - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Qt: Drag and Drop (DnD)";
-    var mkdocs_page_input_path = "qt/14-dnd/index.md";
+    var mkdocs_page_name = "plugin";
+    var mkdocs_page_input_path = "qt/27-plugin.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -107,7 +107,7 @@
     
       
     
-    <li>Qt: Drag and Drop (DnD)</li>
+    <li>plugin</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,13 +117,32 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="qt-drag-and-drop-dnd">Qt: Drag and Drop (DnD)</h1>
-<hr />
-<h3 id="1-drag-text-file-to-widget"><a href="1-text-widget/">1. drag text file to widget</a></h3>
-<hr />
-<h3 id="2-clipboard"><a href="2-clipboard/">2. clipboard</a></h3>
-<hr />
-<h3 id="3-misc"><a href="3-misc/">3. misc</a></h3>
+                <h1 id="plugin">plugin</h1>
+<h3 id="plugin-as-shared-library">plugin as shared library</h3>
+<h4 id="how-to-create-project-for-plugin">how to create project for plugin</h4>
+<ul>
+<li>click <code>File</code> -&gt; <code>New File and Project</code> -&gt; <code>Library</code> -&gt; <code>Qt Quick 2 Extension Plugin</code></li>
+<li>project name is <code>pdbm</code></li>
+<li>Object class-name: <code>Pdbm</code></li>
+<li>URI: <code>com.sevenrain.qmlcomponents</code></li>
+<li><code>build</code></li>
+<li><code>make install</code> in outout folder</li>
+</ul>
+<p><strong>IMPORTANT:</strong> number characters cann't be in URI</p>
+<h4 id="how-to-use-plugin-in-your-app-project">how to use plugin in your app project</h4>
+<ul>
+<li>create your project, for example: <code>dbtest</code></li>
+<li><code>import com.sevenrain.qmlcomponents 1.0</code></li>
+<li>use component <code>Pdbm</code> (class name in plguin project) in your app project</li>
+</ul>
+<h3 id="register-self-defined-type-to-engine">register self-defined type to engine</h3>
+<ul>
+<li>in your qml project, create c++ class (header and source files), class name is <code>Pdbm</code> for example.</li>
+<li>in main.cpp, <code>#include "pdbm.h"</code>, <code>qmlRegisterType&lt;Pdbm&gt;("com.sevenrain.qmlcomponents", 1, 0, "Pdbm");</code> before <code>engine.load(url);</code>, <code>qmlRegisterType</code> is called must be after <code>QQmlApplicationEngine engine;</code></li>
+<li>in qml file, <code>import com.sevenrain.qmlcomponents 1.0</code> and use <code>Pdbm {}</code></li>
+</ul>
+<h3 id="register-self-defined-type-through-context-attribute">register self-defined type through context attribute</h3>
+<p>No finished ...</p>
               
             </div>
           </div>
@@ -160,8 +179,3 @@
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-05-05 23:57:27
--->

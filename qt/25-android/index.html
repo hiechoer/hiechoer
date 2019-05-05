@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>Android - Hiechoer</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Android";
+    var mkdocs_page_input_path = "qt/25-android.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Hiechoer</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Blog</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../">Qt</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../cpp/">C++</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../python/">Python</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../misc/">Misc</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../other/">Other</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../about/">Find Us</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Hiechoer</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Android</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="android">Android</h1>
+<hr />
+<h3 id="install-tools">install tools</h3>
+<ul>
+<li>https://doc.qt.io/qt-5/android-getting-started.html (follow the steps in this link please)</li>
+<li>https://developer.android.google.cn/</li>
+</ul>
+<h4 id="install-jdk-or-openjdk-firstly-openjdk-for-example-in-this-document">install JDK or OpenJDK firstly (OpenJDK for example in this document)</h4>
+<p><strong>Android SDK doesn't support openjdk8+, so please install OpenJDK-8 from <code>https://jdk.java.net/java-se-ri/8</code></strong></p>
+<ul>
+<li>remove default openjdk firstly to avoid the following problem when install android sdk</li>
+</ul>
+<pre><code>Problem: Warning: javax.net.ssl.SSLException: java.lang.RuntimeException: Unexpected error: java.security.InvalidAlgorithmParameterException: the trustAnchors parameter must be non-empty
+Fix:
+sudo apt-get remove --pruge openjdk* java-common default-jdk
+sudo apt-get autoremove --purge
+check whether you successfully removed all related packages by: sudo update-alternatives --config java
+sudo apt-get install openjdk-8-jdk
+</code></pre>
+
+<ul>
+<li>The following steps are unnecessary:</li>
+</ul>
+<pre><code>In https://openjdk.java.net/, download `openjdk-8u40-b25-linux-x64-10_feb_2015.tar.gz`
+unzip to ~/.Qt/jdk/openjdk/java-se-8u40-ri
+in `/etc/environment`
+
+PATH=&quot;/home/hiechoer/.Qt/jdk/openjdk/java-se-8u40-ri/bin&quot;:...
+JAVA_HOME=&quot;/home/hiechoer/.Qt/jdk/openjdk/java-se-8u40-ri&quot;
+CLASSPATH=&quot;/home/hiechoer/.Qt/jdk/openjdk/java-se-8u40-ri/lib/&quot;
+
+reboot, check `echo $JAVA_HOME` and `java -version`
+</code></pre>
+
+<h4 id="the-android-sdk-tools">The Android SDK Tools</h4>
+<ul>
+<li>touch ~/.android/repositories.cfg</li>
+<li>Search <code>Command line tools only</code> in https://developer.android.google.cn/studio, download <code>sdk-tools-linux-xxxxxxx.zip</code></li>
+<li>unzip to <code>/home/hiechoer/.Qt/sdk/tools</code></li>
+<li>./bin/sdkmanager --update</li>
+<li>./bin/sdkmanager --list</li>
+<li>check version number for your android device</li>
+<li>for example: ./bin/sdkmanager "platforms;android-26", sdk-26 is for android-8.0</li>
+<li>configuring your development host on linux for example: <code>sudo apt-get install libstdc++6:i386 libgcc1:i386 zlib1g:i386 libncurses5:i386</code></li>
+<li>install dependencies to run the emulator: <code>sudo apt-get install libsdl1.2debian:i386</code></li>
+<li>./bin/sdkmanager "tools"</li>
+<li>./bin/sdkmanager "emulator"</li>
+<li>./bin/sdkmanager "build-tools;26.0.3"</li>
+<li>./bin/sdkmanager "build-tools;29.0.0-rc1"</li>
+<li>./bin/sdkmanager "patcher;v4"</li>
+<li>./bin/sdkmanager "platform-tools"</li>
+</ul>
+<h4 id="the-android-ndk">The Android NDK</h4>
+<p>In https://developer.android.google.cn/ndk/downloads, download <code>android-ndk-xxxx-linux-x86_64.zip</code></p>
+<ul>
+<li>upzip to <code>/home/hiechoer/.Qt/ndk/android-ndk-r19c</code></li>
+</ul>
+<h4 id="config-qt-creator-community">Config Qt Creator (Community)</h4>
+<p>In <code>Tools</code> -&gt; <code>Options</code> -&gt; <code>Devices</code> -&gt; <code>Android</code>:</p>
+<ul>
+<li>Add Android NDK path to: <code>/home/hiechoer/.Qt/ndk/android-ndk-r19c</code></li>
+<li>Add Android SDK path to: <code>/home/hiechoer/.Qt/sdk</code></li>
+<li>Qt Creator can update configuration automatelly, check if everything is ok to ndk and sdk</li>
+</ul>
+<pre><code>The Android SDK path is: &quot;/home/hiechoer/.Qt/sdk&quot; but not &quot;/home/hiechoer/.Qt/sdk/tools&quot;, then Qt Creator will install some tools automatelly, please click &quot;Accept&quot; to licenses.
+</code></pre>
+
+<h4 id="build-for-android">Build for Android</h4>
+<ul>
+<li>Check cpu version in your device</li>
+<li>Click <code>Projects</code> -&gt; <code>Build &amp; Run</code> -&gt; <code>Android for xxx</code>, for example: Android for arm64-v8a (Clang Qt 5.12.3 f or Android ARM64-v8a)</li>
+<li>Build (Qt Creator will download some packages automatelly in this step)</li>
+<li>Get apk file in working directory (path: .../android-build/build/outputs/apk/debug/android-build-debug.apk)</li>
+</ul>
+<h4 id="set-name-icon-for-app">Set name &amp; icon for app</h4>
+<ul>
+<li>build</li>
+<li>mkdir android-sources in src code folder</li>
+<li>copy ../build-xxx/android-build/AndroidManifest.xml to new android-sources folder</li>
+<li>in qt creator, right-click your project, select <code>Add Existing Files...</code>, and select AndroidManifest.xml from the android-sources folder to add it to your project</li>
+<li>double click AndroidManifest.xml</li>
+<li>add source/prefix/files to the project for icons (for example some png)</li>
+<li>you can change: 3 size icons (36x36, 72x72, 96x96), Application name, Version name</li>
+<li>add <code>ANDROID_PACKAGE_SOURCE_DIR = $$PWD/android-sources</code> in your project.pro</li>
+<li>re-build</li>
+</ul>
+<h4 id="problems">Problems</h4>
+<ul>
+<li>build the wrong android sdk version</li>
+</ul>
+<pre><code>Remove the following folders and files about confs of Qt Creator, then restart Qt Creator:
+~/.config/QtProject.conf
+~/.config/Qt
+~/.config/QtProject
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>
