@@ -180,9 +180,10 @@ main.cpp  psql.json  psql.pro  qsql_psql.cpp  qsql_psql_p.h  README
 
 <h4 id="install-postgresql">install postgresql</h4>
 <ul>
-<li>Command: pacman -S postgresql, pacman -S postgresql-libs, pacman -S postgresql-docs</li>
+<li>Command on manjaro: pacman -S postgresql, pacman -S postgresql-libs, pacman -S postgresql-docs</li>
+<li>Command on debian: apt-get update, apt-get install postgresql postgresql-doc libpq-dev postgresql-contrib</li>
 </ul>
-<h4 id="if-something-wrong-when-install-postgresql-set-chinese-source-firstly">if something wrong when install postgresql, set Chinese source firstly</h4>
+<h4 id="if-something-wrong-when-install-postgresql-on-manjaro-set-chinese-source-firstly">if something wrong when install postgresql on manjaro, set Chinese source firstly</h4>
 <ul>
 <li>pacman-mirrors -i -c China -m rank</li>
 <li>pacman -Syy</li>
@@ -194,7 +195,8 @@ SigLevel = Optional TrustedOnly
 Server = https://mirrors.tuna.tsinghua.edu.cn/archlinuxcn/$arch
 </code></pre>
 
-<h4 id="config-postgresql">config postgresql</h4>
+<h3 id="config-postgresql">config postgresql</h3>
+<h4 id="create-user-and-db-on-manjaro">create user and db on manjaro</h4>
 <p>See: <code>https://wiki.archlinux.org/index.php/PostgreSQL</code></p>
 <ul>
 <li>enter postgres user: <code>su, su -l postgres</code> or <code>sudo -iu postgres</code></li>
@@ -231,15 +233,40 @@ Shall the new role be allowed to create more new roles? (y/n) y
 <li>create database:</li>
 </ul>
 <p><code>[hiechoer@hiechoer-pc ~]$ createdb mytestdb</code></p>
+<h4 id="create-user-and-db-on-debian">create user and db on debian</h4>
+<ul>
+<li>enter postgres user: <code>su, su -l postgres</code>, then you can enter <code>psql</code> and <code>\q</code> to quit psql, quit <code>psql</code> then continue to create user and database.</li>
+<li>after <code>su -l postgres</code>, <code>createuser hiechoer</code></li>
+<li><code>createdb mytestdb</code></li>
+<li>enter <code>psql</code>, <code>grant all privileges on database mytestdb to hiechoer</code>, <code>\password hiechoer</code> to change your password, <code>\password</code> to change postgres's password</li>
+</ul>
 <h4 id="config-listen-addresses">config listen addresses</h4>
-<p>edit <code>var/lib/postgresql/data/postgresql.conf</code>, update to <code>listen_addresses='*'</code>, then reboot the service</p>
+<ul>
+<li>on manjaro: edit <code>/var/lib/postgresql/data/postgresql.conf</code>, update to <code>listen_addresses='*'</code>, then reboot the service</li>
+<li>on debian: edit <code>/etc/postgresql/9.6/main/postgresql.conf</code>, update to <code>listen_addresses='*'</code>, then reboot the service by <code>service postgresql restart</code></li>
+</ul>
 <h4 id="configure-postgresql-to-be-accessible-from-remote-hosts">configure PostgreSQL to be accessible from remote hosts</h4>
-<p>edit <code>/var/lib/postgresql/data/pg_hba.conf</code>, add one line: <code>host mytestdb hiechoer 192.168.0.0/16 trust</code>, then reboot the service</p>
+<ul>
+<li><code>show config_file</code> too see location of conf</li>
+<li>on manjaro: edit <code>/var/lib/postgresql/data/pg_hba.conf</code>, add one line: <code>host mytestdb hiechoer 192.168.0.0/16 trust</code>, then reboot the service</li>
+<li>on debian: edit <code>/etc/postgresql/9.6/main/pg_hba.conf</code></li>
+</ul>
+<pre><code>modify:
+local all postgres md5
+local all all md5
+
+append 2 lines:
+host mytestdb hiechoer 0.0.0.0/0 md5
+host mytestdb hiechoer 127.0.0.1/32 md5
+
+then reboot the service
+</code></pre>
+
 <h4 id="some-useful-postgresql-commands">some useful postgresql commands</h4>
 <ul>
 <li>login to db (mytestdb) with special user (hiechoer) and quit:</li>
 </ul>
-<pre><code>[hiechoer@hiechoer-pc ~]$ psql mytestdb hiechoer
+<pre><code>[hiechoer@hiechoer-pc ~]$ psql mytestdb hiechoer (or: psql -U hiechoer -d mytestdb)
 psql (11.1)
 Type &quot;help&quot; for help.
 
