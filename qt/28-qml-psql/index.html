@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>sample on debian for qml and postgresql - Hiechoer</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "sample on debian for qml and postgresql";
+    var mkdocs_page_input_path = "qt/28-qml-psql.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Hiechoer</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Blog</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../">Qt</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../cpp/">C++</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../python/">Python</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../misc/">Misc</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../other/">Other</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../about/">Find Us</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Hiechoer</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>sample on debian for qml and postgresql</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="sample-on-debian-for-qml-and-postgresql">sample on debian for qml and postgresql</h1>
+<h3 id="config-database">config database</h3>
+<ul>
+<li>install postgresql</li>
+<li>config <code>listen_address</code> to <code>*</code></li>
+<li>accessible from remote hosts</li>
+<li>create user <code>hiechoer</code> and config password to it</li>
+<li>create database <code>myitemdb</code></li>
+<li>grant privileges on <code>myitemdb</code> to <code>hiecheor</code></li>
+<li>create tables as following</li>
+</ul>
+<pre><code>myitemdb=&gt; create table myitem(
+myitemdb(&gt; id SERIAL PRIMARY KEY,
+myitemdb(&gt; name char(32),
+myitemdb(&gt; status int,
+myitemdb(&gt; content TEXT);
+CREATE TABLE
+myitemdb=&gt; create table myuser(
+myitemdb(&gt; name char(32),
+myitemdb(&gt; nick char(32),
+myitemdb(&gt; created timestamp without time zone,
+myitemdb(&gt; status int);
+CREATE TABLE
+myitemdb=&gt; alter table myuser add column avatar bytea;
+ALTER TABLE
+myitemdb=&gt; alter table myuser add column password TEXT;
+ALTER TABLE
+myitemdb=&gt;
+myitemdb=&gt; \d
+              List of relations
+ Schema |     Name      |   Type   |  Owner
+--------+---------------+----------+----------
+ public | myitem        | table    | hiechoer
+ public | myitem_id_seq | sequence | hiechoer
+ public | myuser        | table    | hiechoer
+(3 rows)
+
+myitemdb=&gt; \d myitem
+                             Table &quot;public.myitem&quot;
+ Column  |     Type      |                      Modifiers
+---------+---------------+-----------------------------------------------------
+ id      | integer       | not null default nextval('myitem_id_seq'::regclass)
+ name    | character(32) | 
+ status  | integer       | 
+ content | text          | 
+Indexes:
+    &quot;myitem_pkey&quot; PRIMARY KEY, btree (id)
+
+myitemdb=&gt; \d myuser
+               Table &quot;public.myuser&quot;
+  Column  |            Type             | Modifiers 
+----------+-----------------------------+-----------
+ name     | character(32)               | 
+ nick     | character(32)               | 
+ created  | timestamp without time zone | 
+ status   | integer                     | 
+ avatar   | bytea                       | 
+ password | text                        | 
+
+myitemdb=&gt;
+</code></pre>
+
+<h3 id="coding-in-qt-creator">coding in qt creator</h3>
+<ul>
+<li>create your <code>Qt Quick Application - Swipe</code> project, project name is <code>xmem</code></li>
+<li>create <code>Mdbm</code> module from <code>Files and Classes</code> -&gt; <code>C++</code> -&gt; <code>C++ Class</code>, base class is <code>QObject</code> and Class name is <code>Mdbm</code></li>
+<li>enable sql module in <code>xmem.pro</code>: <code>QT += quick sql</code></li>
+<li>change Mdbm's parent class from <code>QObject</code> to <code>QSqlQueryModel</code></li>
+<li>
+<p>add more pages from <code>Files and Classes</code> -&gt; <code>Qt</code> -&gt; <code>QtQuick UI File</code>, and remove useless qml files from project</p>
+</li>
+<li>
+<p>add 2 lines value in database</p>
+</li>
+</ul>
+<pre><code>insert into myuser (name, nick, created, status, avatar, password) values ('zhangsan', 'shabi', current_timestamp, 1, cast('abcdefg' as bytea), '123456');
+insert into myitem (name, status, content) values ('it is name', 1, 'it is content');
+</code></pre>
+
+<ul>
+<li>codes for <code>mdbm.h</code></li>
+</ul>
+<pre><code>#ifndef MDBM_H
+#define MDBM_H
+
+#include &lt;QObject&gt;
+#include &lt;QByteArray&gt;
+
+#include &lt;QString&gt;
+#include &lt;QSqlQueryModel&gt;
+//#include &lt;QSql&gt;
+#include &lt;QSqlDatabase&gt;
+#include &lt;QSqlQuery&gt;
+#include &lt;QSqlRecord&gt;
+#include &lt;QSqlField&gt;
+#include &lt;QSqlIndex&gt;
+#include &lt;QSqlResult&gt;
+
+class Mdbm : public QSqlQueryModel
+{
+    Q_OBJECT
+
+    /* *
+     * properties and interfaces
+     * the status and releated interfaces are just to show how to use it
+     * status: 0: logout, 1, login
+     * */
+    Q_PROPERTY(int status READ status WRITE setStatus NOTIFY statusChanged)
+
+public:
+    explicit Mdbm(QObject *parent = nullptr);
+
+    QHash&lt;int, QByteArray&gt; roleNames() const;
+    void setQuery(const QString &amp;query, const QSqlDatabase &amp;tdb = QSqlDatabase());
+    void setQuery(const QSqlQuery &amp;query);
+    QVariant data(const QModelIndex &amp;index, int role) const;
+
+    int status();
+    void setStatus(int status);
+
+    Q_INVOKABLE void user_register();
+    Q_INVOKABLE void user_login();
+    Q_INVOKABLE void user_logout();
+    Q_INVOKABLE void user_unregister();
+    Q_INVOKABLE void item_operate();
+
+signals:
+    void statusChanged(const int status);
+
+public slots:
+    void onStatusChanged(int status);
+};
+</code></pre>
+
+<ul>
+<li>codes for <code>mdbm.cpp</code></li>
+</ul>
+<pre><code>#include &quot;mdbm.h&quot;
+
+#include &lt;QtDebug&gt;
+
+Mdbm::Mdbm(QObject *parent) : QSqlQueryModel(parent)
+{
+}
+
+int Mdbm::status() {
+    return 0;
+}
+
+void Mdbm::setStatus(int status) {
+}
+
+void Mdbm::onStatusChanged(const int status) {
+}
+
+void Mdbm::user_register() {
+}
+
+void Mdbm::user_unregister() {
+}
+
+void Mdbm::user_login() {
+}
+
+void Mdbm::user_logout() {
+}
+
+void Mdbm::item_operate() {
+}
+
+QHash&lt;int, QByteArray&gt; Mdbm::roleNames() const {
+    QHash&lt;int, QByteArray&gt; roleNames;
+    for (int i = 0; i &lt; record().count(); i ++) {
+        roleNames[Qt::UserRole + i +1] = record().fieldName(i).toUtf8();
+    }
+    return roleNames;
+}
+
+void Mdbm::setQuery(const QString &amp;query, const QSqlDatabase &amp;tdb) {
+    QSqlQueryModel::setQuery(query, tdb);
+}
+
+void Mdbm::setQuery(const QSqlQuery &amp;query) {
+    QSqlQueryModel::setQuery(query);
+}
+
+QVariant Mdbm::data(const QModelIndex &amp;index, int role) const {
+    QVariant value;
+    if (role &lt; Qt::UserRole) {
+        value = QSqlQueryModel::data(index, role);
+    } else {
+        int columnIdx = role - Qt::UserRole - 1;
+        QModelIndex modelIndex = this-&gt;index(index.row(), columnIdx);
+        value = QSqlQueryModel::data(modelIndex, Qt::DisplayRole);
+    }
+    return value;
+}
+</code></pre>
+
+<ul>
+<li>codes for <code>main.cpp</code></li>
+</ul>
+<pre><code>#include &lt;QGuiApplication&gt;
+#include &lt;QQmlApplicationEngine&gt;
+
+#include &quot;mdbm.h&quot;
+#include &lt;QQmlContext&gt;
+#include &lt;QCryptographicHash&gt;
+#include &lt;QByteArray&gt;
+
+#include &lt;QtDebug&gt;
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication::setAttribute(Qt::AA_EnableHighDpiScaling);
+
+    QGuiApplication app(argc, argv);
+
+    QQmlApplicationEngine engine;
+
+    /*load self-defined type*/
+    //qmlRegisterType&lt;Mdbm&gt;(&quot;com.hiechoer.qmlcomponents&quot;, 1, 0, &quot;Mdbm&quot;);
+
+    /*connect to database*/
+    QSqlDatabase db;
+    int port = 0;
+    db = QSqlDatabase::addDatabase(&quot;QPSQL&quot;);
+    db.setHostName(&quot;127.0.0.1&quot;);
+    db.setDatabaseName(&quot;myitemdb&quot;);
+    db.setUserName(&quot;hiechoer&quot;);
+    db.setPassword(&quot;breizh&quot;);
+    if (port) {
+        db.setPort(port);
+    }
+    bool ok = db.open();
+    if (!ok) {
+        qDebug(&quot;connect to database fail&quot;);
+        return -1;
+    } else {
+        qDebug(&quot;connect to database successfully&quot;);
+    }
+
+    /*build model display in each page*/
+    Mdbm *itemCurrent = new Mdbm();
+    Mdbm *itemFinished = new Mdbm();
+    Mdbm *itemBacklog = new Mdbm();
+    itemCurrent-&gt;setQuery(QString(&quot;select name,content from myitem where status=%1&quot;).arg(1), db);
+    itemFinished-&gt;setQuery(QString(&quot;select name,content from myitem where status=%1&quot;).arg(0), db);
+    itemBacklog-&gt;setQuery(QString(&quot;select name,content from myitem where status=%1&quot;).arg(2), db);
+    engine.rootContext()-&gt;setContextProperty(&quot;modelCurrent&quot;, itemCurrent);
+    engine.rootContext()-&gt;setContextProperty(&quot;modelFinished&quot;, itemFinished);
+    engine.rootContext()-&gt;setContextProperty(&quot;modelBacklog&quot;, itemBacklog);
+
+    const QUrl url(QStringLiteral(&quot;qrc:/main.qml&quot;));
+    QObject::connect(&amp;engine, &amp;QQmlApplicationEngine::objectCreated,
+                     &amp;app, [url](QObject *obj, const QUrl &amp;objUrl) {
+        if (!obj &amp;&amp; url == objUrl)
+            QCoreApplication::exit(-1);
+    }, Qt::QueuedConnection);
+    engine.load(url);
+
+    return app.exec();
+}
+</code></pre>
+
+<ul>
+<li>codes for <code>main.qml</code></li>
+</ul>
+<pre><code>import QtQuick 2.12
+import QtQuick.Controls 2.5
+
+ApplicationWindow {
+    visible: true
+    /*it must set to be max value when depoly to device*/
+    width: 480
+    height: 640
+    title: qsTr(&quot;Tabs&quot;)
+
+    SwipeView {
+        id: swipeView
+        anchors.fill: parent
+        currentIndex: tabBar.currentIndex
+        width: parent.width
+        height: parent.height
+
+        Page1Form {
+        }
+
+        Page2Form {
+        }
+
+        Page3Form {
+        }
+
+        Page4Form {
+        }
+    }
+
+    footer: TabBar {
+        id: tabBar
+        currentIndex: swipeView.currentIndex
+
+        TabButton {
+            text: qsTr(&quot;Current&quot;)
+        }
+        TabButton {
+            text: qsTr(&quot;Finished&quot;)
+        }
+        TabButton {
+            text: qsTr(&quot;Backlog&quot;)
+        }
+        TabButton {
+            text: qsTr(&quot;Me&quot;)
+        }
+    }
+}
+</code></pre>
+
+<ul>
+<li>codes for <code>Page1Form.ui.qml</code></li>
+</ul>
+<pre><code>import QtQuick 2.12
+import QtQuick.Controls 2.5
+
+//import com.hiechoer.qmlcomponents 1.0
+
+Page {
+    id: page
+    /*
+    width: maximumWidth
+    height: maximumHeight
+    */
+    width: 480
+    height: 640
+
+    header: Label {
+        id: header
+        text: qsTr(&quot;Current&quot;)
+        font.pixelSize: Qt.application.font.pixelSize * 2
+        padding: 10
+    }
+
+    ListView {
+        id: listView
+        x: 0
+        y: header.height
+        width: parent.width
+        height: parent.height - header.height
+        currentIndex: 1
+        model: modelCurrent
+        delegate: Item {
+            id: delegateCurrent
+            width: listView.width
+            height: 30
+            Rectangle {
+                width: parent.width
+                height: parent.height
+                anchors.fill: parent
+                Row {
+                    width: parent.width
+                    height: parent.height
+                    padding: 5
+                    Text {
+                        id: textName
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.width / 3
+                        height: parent.height
+                        elide: Text.ElideRight
+                        padding: 5
+                        text: name
+                        font.pixelSize: 12
+                    }
+                    Text {
+                        id: textContent
+                        anchors.verticalCenter: parent.verticalCenter
+                        width: parent.width / 3 * 2
+                        elide: Text.ElideRight
+                        height: parent.height
+                        padding: 5
+                        text: content
+                        font.pixelSize: 12
+                    }
+                }
+            }
+            MouseArea {
+                anchors.fill: parent
+                onClicked: listView.currentIndex = index;
+            }
+        }
+    }
+}
+</code></pre>
+
+<h3 id="how-to-sqlite">how to sqlite</h3>
+<h4 id="sqlite-on-debian">sqlite on debian</h4>
+<ul>
+<li>apt-get install lib32z1 lib32ncurses5</li>
+<li>download sqlite3 and unzip it</li>
+<li>create db: ./sqlite3 myitemdb</li>
+</ul>
+<pre><code>sqlite&gt; CREATE TABLE myuser(
+   ...&gt; name char(32),
+   ...&gt; nick char(32),
+   ...&gt; status int,
+   ...&gt; password text,
+   ...&gt; created text);
+sqlite&gt;
+sqlite&gt; CREATE TABLE myitem(
+   ...&gt; name char(32),
+   ...&gt; status int,
+   ...&gt; user char(32),
+   ...&gt; content text);
+sqlite&gt; INSERT INTO myuser(name, nick, created, password, status) VALUES ('zhangsan', 'bighead', '2019-05-08 11:03:00', '123456', 0);
+sqlite&gt; SELECT * from myuser;
+zhangsan|bighead|0|123456|2019-05-08 11:03:00
+sqlite&gt;
+sqlite&gt; INSERT INTO myitem(name, status, user, content) VALUES ('temp msg', 0, 'zhangsan', 'this is test message here');
+sqlite&gt; select * from myitem;
+temp msg|0|zhangsan|this is test message here
+sqlite&gt;
+</code></pre>
+
+<h4 id="how-to-app-with-sqlite">how to app with sqlite</h4>
+<p>It is the same as postgresql, but sqlite you should't set user name and password to sqlite, for example:</p>
+<pre><code>#include &quot;mdbm.h&quot;
+#include &lt;QQmlContext&gt;
+#include &lt;QtDebug
+
+QSqlDatabase db;
+db = QSqlDatabase::addDatabase(&quot;QSQLITE&quot;);
+db.setHostName(&quot;127.0.0.1&quot;);
+db.setDatabaseName(&quot;/usr/share/sqlite/myitemdb&quot;);
+bool ok = db.open();
+if (!ok) {
+    qDebug(&quot;connect to database fail&quot;);
+    return -1;
+} else {
+    qDebug(&quot;connect to database successfully&quot;);
+}
+
+Mdbm *itemModel = new Mdbm();
+itemModel-&gt;setQuery(QString(&quot;select name,content from myitem where status=%1&quot;).arg(1), db);
+engine.rootContext()-&gt;setContextProperty(&quot;itemModel&quot;, itemModel);
+
+Mdbm *userModel = new Mdbm();
+userModel-&gt;setQuery(QString(&quot;select name,nick,created from myuser where name=%1&quot;).arg(1), db);
+</code></pre>
+
+<h3 id="how-to-qml-bootstrap">how to qml-bootstrap</h3>
+<h4 id="download-qml-bootstrap">download qml-bootstrap</h4>
+<p>link: https://github.com/brexis/qml-bootstrap
+other project: https://github.com/papyros/qml-material</p>
+<h4 id="design-ui">design ui</h4>
+<ul>
+<li>create new qtquick swipe project</li>
+<li>src folder from qml-bootstrap to qmini</li>
+<li><code>Add Existing Directory</code> about src to qmini on <code>qml.qrc</code>, in <code>select file matching</code> append all file types which in src folder</li>
+<li>remove duplicate file <code>main.qml</code> from <code>qml.qrc</code></li>
+<li>test if everything ok, for example:</li>
+</ul>
+<pre><code>in Page1Form.ui.qml:
+include &quot;src/buttons&quot;
+
+codes fragement:
+ButtonDefault {
+    design: &quot;xxxxx&quot;
+    width: 100
+    height: 50
+}
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>

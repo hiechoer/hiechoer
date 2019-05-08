@@ -252,14 +252,16 @@ Shall the new role be allowed to create more new roles? (y/n) y
 <li>on debian: edit <code>/etc/postgresql/9.6/main/pg_hba.conf</code></li>
 </ul>
 <pre><code>modify:
-local all postgres md5
-local all all md5
+local all postgres trust
+local all hiechoer password
 
 append 2 lines:
-host mytestdb hiechoer 0.0.0.0/0 md5
-host mytestdb hiechoer 127.0.0.1/32 md5
+host mytestdb hiechoer 0.0.0.0/0 password
+host mytestdb hiechoer 127.0.0.1/32 password
 
 then reboot the service
+
+IMPORTANT: entry in pg_hba.conf only be matched the first one, &quot;md5&quot; is encrypted password and &quot;password&quot; is clear text password, &quot;localhost&quot; may be translated to ipv6 address, please see log in &quot;/var/log/postgresql&quot;
 </code></pre>
 
 <h4 id="some-useful-postgresql-commands">some useful postgresql commands</h4>
