@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>function - Hiechoer</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "function";
+    var mkdocs_page_input_path = "python/3-function.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Hiechoer</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Blog</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../qt/">Qt</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../cpp/">C++</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../">Python</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../misc/">Misc</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../other/">Other</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../about/">Find Us</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Hiechoer</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>function</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="function">function</h1>
+<hr />
+<h3 id="argument">argument</h3>
+<ul>
+<li>position argument</li>
+<li>default argument</li>
+<li>available argument</li>
+<li>key argument</li>
+<li>named key argument</li>
+</ul>
+<pre><code>import sys
+
+def func_position(a, b):
+    print('%s: a: %s, b: %s' % (sys._getframe().f_code.co_name, a, b))
+
+def func_default(a, b=10):
+    print('%s: a: %s, b: %s' % (sys._getframe().f_code.co_name, a, b))
+
+def func_available(a, *args):
+    print('%s: a: %s, args is a tuple name: %s' % (sys._getframe().f_code.co_name, a, args))
+
+# x can not be the same name with in any of kw
+def func_key(x, **kw):
+    print('%s: a: %s, kw is a dict name: %s' % (sys._getframe().f_code.co_name, x, kw))
+
+def func_named_key_no_available(a, *, name, city):
+    print('%s: a: %s, name: %s, city: %s' % (sys._getframe().f_code.co_name, a, name, city))
+
+def func_named_key_with_available(a, *args, name, city):
+    print('%s: a: %s, args: %s, name: %s, city: %s' % (sys._getframe().f_code.co_name, a, args, name, city))
+
+
+if __name__ == '__main__':
+    func_position(3, 5)
+
+    func_default(3)
+
+    l = [3, 4, 5]
+    func_available(2, *l)
+
+    d = {'a': 'aaa', 'b': 'bbb'}
+    func_key(11, **d)
+
+    func_named_key_no_available(11, name='zhangsan', city='chengdu')
+
+    l = [1, 2, 3]
+    func_named_key_with_available(11, *l, name='lisi', city='beijing')
+</code></pre>
+
+<p><strong><code>position argument</code> &gt; <code>default argument</code> &gt; <code>variable arguement</code> &gt; <code>name key argument</code> &gt; <code>key argument</code></strong></p>
+<h3 id="tail-call-optimizations-recursion">tail-call optimizations recursion</h3>
+<p><strong>call function itself when return, and no expression in the return</strong></p>
+<pre><code>def fact_iter(n, product):
+    if n == 1:
+        return product
+    return fact_iter(n -1, n * product)
+
+def fact(x):
+    return fact_iter(x, 1)
+</code></pre>
+
+<h3 id="map-reduce-lambda-filter-sorted"><code>map</code>, <code>reduce</code>, <code>lambda</code>, <code>filter</code>, <code>sorted</code></h3>
+<pre><code>#!/usr/bin/env python3
+
+def iter_num():
+    n = 1
+    while True:
+        n = n + 1
+        yield n
+
+def not_division(n):
+    return lambda x: x % n &gt; 0
+
+def primes():
+    curiter = iter_num()
+    while True:
+        firstnum = next(curiter)
+        yield firstnum
+        curiter = filter(not_division(firstnum), curiter)
+
+def max_prime(max):
+    # max: max prime value
+    #for n in primes():
+    #    if n &lt; max:
+    #        print(n)
+    #    else:
+    #        break
+
+    # max: number of prime value
+    n = 0
+    p = primes()
+    while n &lt; max:
+        print(next(p))
+        n = n + 1
+
+if __name__ == '__main__':
+    max_prime(30)
+</code></pre>
+
+<h3 id="lambda-and-partial">lambda and partial</h3>
+<pre><code>L = list(map(lambda x: x * x, range(10)))
+newfunc = functools.partial(int, base=2)
+</code></pre>
+
+<h3 id="closure-function-as-return-value">Closure: function as return value</h3>
+<pre><code>def lazy_xx0():
+    L = []
+    for i in range(1, 4):
+        def ifunc():
+            return i * i
+        L.append(ifunc)
+    return L
+
+temp = lazy_xx0()
+print(temp[0]())
+print(temp[1]())
+print(temp[2]())
+
+def lazy_xx1():
+    L = []
+
+    def ifunc(v):
+        def xx():
+            return v * v
+        return xx
+
+    for i in range(1, 4):
+        L.append(ifunc(i))
+    return L
+
+temp = lazy_xx1()
+print(temp[0]())
+print(temp[1]())
+print(temp[2]())
+</code></pre>
+
+<h3 id="decorator-improve-function">decorator: improve function</h3>
+<pre><code>#!/usr/bin/env python3
+
+import functools
+
+### case 1: if no parameter in decorator function {
+def mydecorator1(func):
+    # XXX: `@functools.wraps(func)` to fix wrong `__name__` in func
+    @functools.wraps(func)
+    def wrapper(*args, **kw):
+        # do something more
+        return func(*args, **kw)
+    return wrapper
+
+@mydecorator1
+def test1():
+    print('in test1')
+
+# `@mydecorator1` is same with: test1 = mydecorator1(test1)
+# then `test1` is the same with `wrapper`
+# and old test1 function will be called as `func` in `wrapper` function
+# now if you call test1(), it will call wrapper()
+# } end
+
+### case 2: if with parameter in decorator function {
+def outerfunc(more_info):
+    def mydecorator2(func):
+        # XXX: `@functools.wraps(func)` to fix wrong `__name__` in func
+        @functools.wraps(func)
+        def wrapper(*args, **kw):
+            print('parameter: %s' % more_info)
+            return func(*args, **kw)
+        return wrapper
+    return mydecorator2
+
+@outerfunc('xxx')
+def test2():
+    print('in test2')
+
+# `@outerfunc('xxx')` is same with: test2 = outerfunc('xxx')(test2)
+# 1: exec outerfunc('xxx'), then return mydecorator2
+# 2: exec mydecorator2(test2), then return wrapper to new test2, it is same with: test2 = mydecorator2(test2)
+# 3: now if you call test2(), it will call wrapper()
+# } end
+
+# **the last returned function will be wrapper, so call `@functools.wraps(func)` on `wrapper`**
+</code></pre>
+
+<h3 id="misc">misc</h3>
+<ul>
+<li>return more values in function, it is a tuple actually and can be accepted by several vars</li>
+</ul>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>

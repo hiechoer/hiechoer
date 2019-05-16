@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="None">
+  
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>Qt: Drag and Drop (DnD) - Hiechoer</title>
+  <title>interface - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Qt: Drag and Drop (DnD)";
-    var mkdocs_page_input_path = "qt/14-dnd/index.md";
+    var mkdocs_page_name = "interface";
+    var mkdocs_page_input_path = "python/2-interface.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -59,7 +59,7 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../">Qt</a>
+    <a class="" href="../../qt/">Qt</a>
                 </li>
                 <li class="">
                     
@@ -67,7 +67,7 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../../python/">Python</a>
+    <a class="" href="../">Python</a>
                 </li>
                 <li class="">
                     
@@ -107,7 +107,7 @@
     
       
     
-    <li>Qt: Drag and Drop (DnD)</li>
+    <li>interface</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,13 +117,23 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="qt-drag-and-drop-dnd">Qt: Drag and Drop (DnD)</h1>
+                <h1 id="interface">interface</h1>
 <hr />
-<h3 id="1-drag-text-file-to-widget"><a href="1-text-widget/">1. drag text file to widget</a></h3>
-<hr />
-<h3 id="2-clipboard"><a href="2-clipboard/">2. clipboard</a></h3>
-<hr />
-<h3 id="3-misc"><a href="3-misc/">3. misc</a></h3>
+<h3 id="misc">misc</h3>
+<ul>
+<li><code>a = input()</code> then <code>int(a)</code></li>
+<li>ord('中'): translate to int value of ascii, chr(88): translate to character</li>
+<li>'english or chinese'.encode('utf-8'), 'english'.encode('ascii'), b'englisth'.decode('ascii'), b'english or chinese'.decode('utf-8')</li>
+<li>len('chars'), len(b'bytes'), len([1, 2, 3]), len to other types</li>
+<li>int('10'), float, str, bool</li>
+<li>str(123), str(True)</li>
+<li>list(range(5)) to generate a number list</li>
+<li>loop: while, for-in</li>
+<li>if, if-else, if-elif-else</li>
+<li>abs, max, min, hex</li>
+<li>isinstance then raise a error</li>
+<li>slice to list and tuple and string: L[b:n:s]</li>
+</ul>
               
             </div>
           </div>
@@ -160,8 +170,3 @@
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-05-16 10:35:20
--->

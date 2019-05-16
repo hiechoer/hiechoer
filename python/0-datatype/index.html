@@ -5,10 +5,10 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="None">
+  
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>Qt: Drag and Drop (DnD) - Hiechoer</title>
+  <title>datatype - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "Qt: Drag and Drop (DnD)";
-    var mkdocs_page_input_path = "qt/14-dnd/index.md";
+    var mkdocs_page_name = "datatype";
+    var mkdocs_page_input_path = "python/0-datatype.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -59,7 +59,7 @@
     <ul class="subnav">
                 <li class="">
                     
-    <a class="" href="../">Qt</a>
+    <a class="" href="../../qt/">Qt</a>
                 </li>
                 <li class="">
                     
@@ -67,7 +67,7 @@
                 </li>
                 <li class="">
                     
-    <a class="" href="../../python/">Python</a>
+    <a class="" href="../">Python</a>
                 </li>
                 <li class="">
                     
@@ -107,7 +107,7 @@
     
       
     
-    <li>Qt: Drag and Drop (DnD)</li>
+    <li>datatype</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,13 +117,21 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="qt-drag-and-drop-dnd">Qt: Drag and Drop (DnD)</h1>
+                <h1 id="datatype">datatype</h1>
 <hr />
-<h3 id="1-drag-text-file-to-widget"><a href="1-text-widget/">1. drag text file to widget</a></h3>
-<hr />
-<h3 id="2-clipboard"><a href="2-clipboard/">2. clipboard</a></h3>
-<hr />
-<h3 id="3-misc"><a href="3-misc/">3. misc</a></h3>
+<h3 id="misc">misc</h3>
+<ul>
+<li><code>2**10</code> is 1024</li>
+<li><code>print('a', 'b')</code> is 'a b', <code>print('a' 'b')</code> is 'ab'</li>
+<li>1: <code>'abcdefg\nabcdefg'</code> will translate <code>\n</code> to next row. 2: <code>r'abcdefg\rabcdefg'</code> will not translate <code>\n</code></li>
+<li>int both <code>'''</code>, string can be multi lines</li>
+<li>bool type can use <code>and</code>, <code>or</code>, <code>not</code></li>
+<li>b'abc' is bytes, 'abc' is unicode string</li>
+<li>list (sorted): push/pop/insert/remove/+</li>
+<li>tuple (sorted): cann't change element, if only 1 element: t = (111, ), +</li>
+<li>dict (not sorted): d = {'k': 'v'}, pop, <code>if k in d</code>, <code>d.get()</code></li>
+<li>set (not sorted): s =set([1, 2, 3]), add/remove, &amp;, |, -</li>
+</ul>
               
             </div>
           </div>
@@ -160,8 +168,3 @@
 
 </body>
 </html>
-
-<!--
-MkDocs version : 1.0.4
-Build Date UTC : 2019-05-16 10:35:20
--->
