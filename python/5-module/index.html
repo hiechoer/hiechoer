@@ -126,13 +126,13 @@
 <li>tree</li>
 </ul>
 <pre><code>a
- --- _init__.py
+ --- __init__.py
  --- m1.py
 main.py
 </code></pre>
 
 <ul>
-<li>codes in m1.py</li>
+<li>codes in <code>m1.py</code></li>
 </ul>
 <pre><code>#!/usr/bin/env python3
 
@@ -142,13 +142,42 @@ module document (it can be access by __doc__)
 
 __author__ = 'hiechoer'
 
-# this function can not be called from other file
-def _private_func():
-    pass
+## you'd better not call function with prefix '_'
+#def _test():
+#    pass
 
-# this function can be called from other file
+## you'd better not call function with prefix '__'
+#def __test():
+#    pass
+
 def public_func():
     pass
+</code></pre>
+
+<ul>
+<li>codes in <code>__init__.py</code></li>
+</ul>
+<pre><code>#!/usr/bin/env python3
+
+import sys
+
+class Student(object):
+
+    '''
+    it is __doc__ for this class
+    '''
+
+    def __init__(self):
+        print('line %d: %s.%s' % (sys._getframe().f_lineno, self.__class__.__name__, sys._getframe().f_code.co_name))
+
+    def _not_call_test(self):
+        print('line %d: %s.%s' % (sys._getframe().f_lineno, self.__class__.__name__, sys._getframe().f_code.co_name))
+
+    def __private_test(self):
+        print('line %d: %s.%s' % (sys._getframe().f_lineno, self.__class__.__name__, sys._getframe().f_code.co_name))
+
+    def public_test(self):
+        print('line %d: %s.%s' % (sys._getframe().f_lineno, self.__class__.__name__, sys._getframe().f_code.co_name))
 </code></pre>
 
 <ul>
@@ -173,6 +202,16 @@ public_func()
 from a.m1 import public_func
 
 public_func()
+
+# case 5
+from a import Student
+
+s = Student()
+## you'd better don't call function with prefix '_'
+#s._not_call_test()
+## you cann't call function with prefix '__'
+#s.__private_test()
+s.public_test()
 </code></pre>
               
             </div>
