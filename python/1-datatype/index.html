@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>generater - Hiechoer</title>
+  <title>datatype - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "generater";
-    var mkdocs_page_input_path = "python/4-generator.md";
+    var mkdocs_page_name = "datatype";
+    var mkdocs_page_input_path = "python/1-datatype.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -107,7 +107,7 @@
     
       
     
-    <li>generater</li>
+    <li>datatype</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,32 +117,20 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="generater">generater</h1>
+                <h1 id="datatype">datatype</h1>
 <hr />
-<p><strong>Please don't call next(g) but only use <code>for</code> to loop generator</strong></p>
-<h3 id="list-to-generator">list to generator</h3>
-<pre><code>g = (x * x for x in range(10))
-for v in g:
-    print(v)
-</code></pre>
-
-<h3 id="yield-to-generator">yield to generator</h3>
-<pre><code>def fib():
-    n, a, b = 0, 0, 1
-    while True:
-        yield b
-        a, b = b, a + b
-        n = n + 1
-
-f = fib()
-print(next(f))
-</code></pre>
-
-<h3 id="iterable-and-iterator">Iterable and Iterator</h3>
+<h3 id="misc">misc</h3>
 <ul>
-<li><code>Iterable</code> can use <code>for</code> but not <code>next</code> (only <code>__iter__()</code> but no <code>__next__()</code> in Iterable class):  list, tuple, dict, set, str</li>
-<li><code>Iterator</code> can use <code>next</code> (both <code>__iter__()</code> and <code>__next__()</code> in Iterator class): list, tuple, dict, set, str, generator</li>
-<li>function <code>iter()</code> can translate <code>Iterable</code> to <code>Iterator</code>: iter('abc')</li>
+<li><code>2**10</code> is 1024</li>
+<li><code>print('a', 'b')</code> is 'a b', <code>print('a' 'b')</code> is 'ab'</li>
+<li>1: <code>'abcdefg\nabcdefg'</code> will translate <code>\n</code> to next row. 2: <code>r'abcdefg\rabcdefg'</code> will not translate <code>\n</code></li>
+<li>int both <code>'''</code>, string can be multi lines</li>
+<li>bool type can use <code>and</code>, <code>or</code>, <code>not</code></li>
+<li>b'abc' is bytes, 'abc' is unicode string</li>
+<li>list (sorted): push/pop/insert/remove/+</li>
+<li>tuple (sorted): cann't change element, if only 1 element: t = (111, ), +</li>
+<li>dict (not sorted): d = {'k': 'v'}, pop, <code>if k in d</code>, <code>d.get()</code></li>
+<li>set (not sorted): s =set([1, 2, 3]), add/remove, &amp;, |, -</li>
 </ul>
               
             </div>

@@ -120,7 +120,11 @@
                 <h1 id="class">class</h1>
 <hr />
 <h3 id="how-to-define-a-class">how to define a class</h3>
-<pre><code>class Classname(object): # object is parent class, you can change it to other one
+<pre><code># object is default parent class in python3
+# it is the same: class Classname(object):
+class Classname:
+    # instance attribute can hide class attribute
+    # so don't give the same attribute name between class and instance please
     global_class_attr = 'some info'
     def __init__(self, arg):
         self.arg = arg
@@ -131,7 +135,8 @@
 </code></pre>
 
 <h3 id="type-instance-dir-hasattr-getattr-setattr-del">type, instance, dir, hasattr, getattr, setattr, del</h3>
-<pre><code>class Animal(object):
+<pre><code># it is the same: class Animal(object):
+class Animal:
     def run(self):
         print('Animal is running...')
         return
@@ -155,6 +160,369 @@ if __name__ == '__main__':
     if hasattr(bdog, 'run'):
         bfunc = getattr(bdog, 'run')
         bfunc('yyy')
+</code></pre>
+
+<h3 id="__slots__"><code>__slots__</code></h3>
+<pre><code>#!/usr/bin/env python3
+
+'''
+
+import sys
+import types
+
+class Test0:
+    pass
+
+class Test1:
+    __slots__ = ('value1', 'value2')
+
+class Test2(Test1):
+    pass
+
+class Test3(Test1):
+    __slots__ = ()
+
+def func_inst(self):
+    print('calling: %s.%s' % (self.__class__.__name__, sys._getframe().f_code.co_name))
+
+def func_class(self):
+    print('calling: %s.%s' % (self.__class__.__name__, sys._getframe().f_code.co_name))
+
+if __name__ == '__main__':
+    # add methond to instance
+    a0 = Test0()
+    a0.func_inst = types.MethodType(func_inst, a0)
+    a0.func_inst()
+
+    # add method to class
+    Test0.func_class = func_class
+    a1 = Test0()
+    a1.func_class()
+
+    # only can add attribute: value1 and value2
+    a2 = Test1()
+    a2.value1 = 555
+    a2.value2 = 333
+    # a2.value3 = 222
+
+    # subclass cann't access parent's attribute in __slots__
+    a3 = Test2()
+    #a3.value1 = 888
+    a3.temp = 888
+
+    # subclass re-define empty __slots__, then it can access parent's attributs in __slots__
+    a4 = Test3()
+    a4.value1 = 888
+    # a4.temp = 888
+</code></pre>
+
+<h3 id="__all__"><code>__all__</code></h3>
+<h4 id="testpy"><code>test.py</code></h4>
+<pre><code>#!/usr/bin/env python3
+
+import sys
+
+__all__ = ('Test', )
+
+class Test:
+    def __init__(self):
+        print('%s.%s' % (self.__class__.__name__, sys._getframe().f_code.co_name))
+
+class InnerClass:
+    def __init__(self):
+        print('%s.%s' % (self.__class__.__name__, sys._getframe().f_code.co_name))
+</code></pre>
+
+<h4 id="mainpy"><code>main.py</code></h4>
+<ul>
+<li>if <code>from test import *</code>, you can only access class <code>Test</code></li>
+<li>if <code>from test import *</code> and <code>from test import InnerClass</code>, you can access both class <code>Test</code> and <code>InnerClass</code></li>
+</ul>
+<h3 id="__str__-__repr__-__len__"><code>__str__()</code>, <code>__repr__()</code>, <code>__len()__</code></h3>
+<p><code>__repr__()</code> is for developer in interactive environment.</p>
+<pre><code>#!/usr/bin/env python3
+
+class Test:
+    def __init__(self, name):
+        self.__name = name
+    def __str__(self):
+        return 'object %s of class %s' % (self.__name, self.__class__.__name__)
+    def __len__(self): # for example
+        return len(self.__name)
+    __repr__ = __str__
+
+if __name__ == '__main__':
+    t = Test('Zhangsan')
+    print(t)
+    print(len(t))
+</code></pre>
+
+<h3 id="__iter__-and-__next__-__getitem__-and-__setitem__-and-__delitem__-__call__"><code>__iter__()</code> and <code>__next__()</code>, <code>__getitem()__</code> and <code>__setitem__()</code> and <code>__delitem()__</code>, <code>__call__()</code></h3>
+<p><code>__iter__()</code> and <code>__next__()</code> are for <code>for ... in</code>
+<code>__getitem()__</code> and <code>__setitem__()</code> and <code>__delitem()__</code> are for <code>c[list-index]</code> and <code>c[dict-key]</code>
+<code>__getattr__()</code> is for handle non-exist attribution to avoid raise an error
+<code>__call__()</code> is for call on instance, for example: <code>inst()</code>, In python, function is instance of class, you also can treated instance to be a function by <code>__call__()</code></p>
+<pre><code>#!/usr/bin/env python3
+
+class Test:
+    def __init__(self, max):
+        self.__value = list(range(max))
+        self.__current = -1
+    def __iter__(self):
+        return self
+    def __next__(self):
+        self.__current = self.__current + 1
+        if self.__current &gt;= len(self.__value):
+            raise StopIteration
+        return self.__value[self.__current]
+    # you can also define dict in class and access element by c['key']
+    def __getitem__(self, n):
+        if isinstance(n, (int, )):
+            if n &lt; self.__current:
+                return self.__value[n]
+        elif isinstance(n, (slice, )):
+            start = 0 if n.start is None else n.start
+            stop = n.stop if n.stop &lt; len(self.__value) else len(self.__value) - 1
+            step = n.step
+            return self.__value[start:stop:step]
+        else:
+            raise TypeError
+    def __setitem__(self, n, v):
+        if not isinstance(n, (int, )):
+            raise TypeError
+        if n &lt; 0 or n &gt;= len(self.__value):
+            raise ValueError
+        self.__value[n] = v
+    def __delitem__(self, n):
+        if not isinstance(n, (int, )):
+            raise TypeError
+        if n &lt; 0 or n &gt;= len(self.__value):
+            raise ValueError
+        self.__value.pop(n)
+    def __getattr__(self, attr):
+        return 'invalie attribution instead of AttributionError'
+    def __call__(self):
+        print(self.__value)
+
+class Chain:
+    def __init__(self, path=''):
+        self.__path = path
+    def __getattr__(self, path):
+        # or:
+        # self.__path = self.__path + '/' + path
+        # return self
+        return Chain('%s/%s' % (self.__path, path))
+    def __str__(self):
+        return self.__path
+    __repr__ = __str__
+
+if __name__ == '__main__':
+    t = Test(5)
+    # for __iter__(), __next__()
+    print('for all:')
+    for n in t:
+        print(n)
+
+    # for __getitem__()
+    print('3: %d' % t[3])
+    print('[1:4:2]: %s' % t[1:4:2])
+
+    # for __setitem__()
+    t[1] = 888
+    print('t[1] should be 888: %d' % t[1])
+
+    # for __delitem__()
+    # you cann't use &quot;for-in&quot; here because it is a generator and can only access by next()
+    del t[1]
+    print(t[0])
+    print(t[1])
+    print(t[2])
+
+    # for __getattr__()
+    print(t.xxx)
+
+    # for Chain by __getattr__()
+    print(Chain().aaa.bbb.ccc.ddd)
+
+    # for __call__()
+    t()
+</code></pre>
+
+<h3 id="property-setter-and-getter">@property (setter and getter)</h3>
+<pre><code>#!/usr/bin/env python3
+
+class Test:
+    # can only getter and no setter in class
+    @property
+    def myvalue(self):
+        return self.__myvalue
+
+    @myvalue.setter
+    def myvalue(self, v):
+        if not isinstance(v, int):
+            raise ValueError('must be int value')
+        if v &lt; 0 or v &gt; 100:
+            raise ValueError('must be &lt; 0 and &gt; 100')
+        self.__myvalue = v
+
+if __name__ == '__main__':
+    t = Test()
+    t.myvalue = 55
+    print(t.myvalue)
+</code></pre>
+
+<h3 id="multiple-inheritance">multiple inheritance</h3>
+<p><strong>you can use mixin to design multiple inheritance</strong></p>
+<pre><code>#!/usr/bin/env python3
+
+import sys
+
+class Animal:
+    def eat(self):
+        print('%s.%s' % (self.__class__.__name__, sys._getframe().f_code.co_name))
+
+class RunnableMixIn:
+    def run(self):
+        print('%s.%s' % (self.__class__.__name__, sys._getframe().f_code.co_name))
+
+class FlyableMixIn:
+    def fly(self):
+        print('%s.%s' % (self.__class__.__name__, sys._getframe().f_code.co_name))
+
+class XxxMixIn:
+    def xxx(self):
+        pass
+
+class Dog(Animal, RunnableMixIn):
+    pass
+
+class Bird(Animal, FlyableMixIn):
+    pass
+
+if __name__ == '__main__':
+    d = Dog()
+    d.run()
+    d.eat()
+    b = Bird()
+    b.fly()
+    b.eat()
+</code></pre>
+
+<h3 id="enum">Enum</h3>
+<pre><code>#!/usr/bin/env python3
+
+from enum import Enum
+
+Weekday = Enum('Weekday', ('Sunday',
+                           'Monday',
+                           'Tuesday',
+                           'Wedsday',
+                           'Thursday',
+                           'Friday',
+                           'Satday'))
+
+if __name__ == '__main__':
+    print(Weekday.Monday)
+</code></pre>
+
+<h3 id="meta-class">meta class</h3>
+<h4 id="type">type()</h4>
+<pre><code>#!/usr/bin/env python3
+
+import sys
+
+def myfunc(self, temp):
+    print('%s.%s temp: %s' % (self.__class__.__name__, sys._getframe().f_code.co_name, temp))
+
+Test = type('Type', (object, ), dict(myfunc=myfunc))
+
+if __name__ == '__main__':
+    t = Test()
+    t.myfunc('xxx')
+</code></pre>
+
+<h3 id="metaclass">metaclass</h3>
+<pre><code>#!/usr/bin/env python3
+
+################################################################################
+# for filed
+class Field:
+    def __init__(self, name, column_type):
+        self.name = name
+        self.type = column_type
+    def __str__(self):
+        return 'Field %s (type: %s)' % (self.name, self.type)
+    __repr__ = __str__
+
+class IntField(Field):
+    def __init__(self, name):
+        super().__init__(name, 'int')
+
+class StrField(Field):
+    def __init__(self, name):
+        super().__init__(name, 'char(32)')
+
+################################################################################
+# for metaclass
+class ModelMetaclass(type):
+    # NO 'self' in __new__() method, I think the 'cls' is instance of type class,
+    # that is to say, cls's parent is class `type` and 'cls' is your class's parent
+    # so I think cls is the same as 'self' but it is still a class
+    def __new__(cls, name, bases, attrs):
+        if name == 'Model':
+            return type.__new__(cls, name, bases, attrs)
+        mappings = dict()
+        for k, v in attrs.items():
+            if isinstance(v, (Field, )):
+                # move this mapping to 'mappings'
+                print('mapping: %s to %s' % (k, v))
+                mappings[k] = v
+            else:
+                # keep this dict element in attrs, it is useless for me so ignore them
+                # print('general attribute: %s to %s' % (k, v))
+                pass
+        for k in mappings.keys():
+            # the mapping in mappings should be removed from attrs
+            attrs.pop(k)
+        # build new attrs
+        attrs['__table__'] = name
+        attrs['__mappings__'] = mappings
+        # at last in attrs: __table__, __mappings__, general-attributes
+        return type.__new__(cls, name, bases, attrs)
+
+################################################################################
+# for base class, the parent class is dict
+class Model(dict, metaclass=ModelMetaclass):
+    # the dict kw will be attrs in ModelMetaclass
+    def __init__(self, **kw):
+        super().__init__(**kw)
+    def __getattr__(self, key):
+        try:
+            return self[key]
+        except KeyError:
+            raise AttributeError('no attribute %s' % key)
+    def __setattr__(self, key, value):
+        self[key] = value
+    def build_insert(self):
+        fields = []
+        args = []
+        for k, v in self.__mappings__.items():
+            fields.append(v.name)
+            args.append(getattr(self, k, None))
+        # __mappings__ is a dict, so the sequence in fields and args will not be the same with them defined in your sub-class
+        sql = 'insert into %s (%s) values (%s)' % (self.__table__, ','.join(fields), ','.join(map(str, args)))
+        # now you can exec this sql command
+        print('sql command: %s' % sql)
+
+################################################################################
+# Please define your special Model based on class Model, for example:
+class Temp(Model):
+    name = StrField('name')
+    num = IntField('num')
+
+if __name__ == '__main__':
+    t = Temp(name='zhangsan', num=18)
+    t.build_insert()
 </code></pre>
               
             </div>

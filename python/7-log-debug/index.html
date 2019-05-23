@@ -8,7 +8,7 @@
   
   
   <link rel="shortcut icon" href="../../img/favicon.ico">
-  <title>generater - Hiechoer</title>
+  <title>log, debug, test - Hiechoer</title>
   <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
 
   <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
@@ -17,8 +17,8 @@
   
   <script>
     // Current page data
-    var mkdocs_page_name = "generater";
-    var mkdocs_page_input_path = "python/4-generator.md";
+    var mkdocs_page_name = "log, debug, test";
+    var mkdocs_page_input_path = "python/7-log-debug.md";
     var mkdocs_page_url = null;
   </script>
   
@@ -107,7 +107,7 @@
     
       
     
-    <li>generater</li>
+    <li>log, debug, test</li>
     <li class="wy-breadcrumbs-aside">
       
     </li>
@@ -117,32 +117,92 @@
           <div role="main">
             <div class="section">
               
-                <h1 id="generater">generater</h1>
+                <h1 id="log-debug-test">log, debug, test</h1>
 <hr />
-<p><strong>Please don't call next(g) but only use <code>for</code> to loop generator</strong></p>
-<h3 id="list-to-generator">list to generator</h3>
-<pre><code>g = (x * x for x in range(10))
-for v in g:
-    print(v)
+<h3 id="exception">exception</h3>
+<pre><code>raise error somewhere
+
+try:
+    do something
+except ValueError as e:
+    print('except: %s' % e)
+    do something
+    raise
+except AttributeError:
+    do something
+else:
+    do something without any error
+finally:
+    do something
 </code></pre>
 
-<h3 id="yield-to-generator">yield to generator</h3>
-<pre><code>def fib():
-    n, a, b = 0, 0, 1
-    while True:
-        yield b
-        a, b = b, a + b
-        n = n + 1
+<h3 id="logging">logging</h3>
+<pre><code>import logging
 
-f = fib()
-print(next(f))
+logging.info('xxx')
 </code></pre>
 
-<h3 id="iterable-and-iterator">Iterable and Iterator</h3>
+<h3 id="assert">assert</h3>
+<pre><code>assert n != 0, 'n is zero'
+</code></pre>
+
+<h3 id="pdb">pdb</h3>
 <ul>
-<li><code>Iterable</code> can use <code>for</code> but not <code>next</code> (only <code>__iter__()</code> but no <code>__next__()</code> in Iterable class):  list, tuple, dict, set, str</li>
-<li><code>Iterator</code> can use <code>next</code> (both <code>__iter__()</code> and <code>__next__()</code> in Iterator class): list, tuple, dict, set, str, generator</li>
-<li>function <code>iter()</code> can translate <code>Iterable</code> to <code>Iterator</code>: iter('abc')</li>
+<li>python3 -m pdb a.py</li>
+<li>pdb a.py</li>
+</ul>
+<h3 id="unittest">unittest</h3>
+<h4 id="define-your-cases">define your cases</h4>
+<pre><code>import unittest
+from your_package import YourClass
+
+class TestYourClass(unittest.TestCase):
+    def setUp(self):
+        pass
+    def tearDown(self):
+        pass
+    def test_xxx(self):
+        do something
+        self.assertEqual()
+        self.assertTrue()
+        with self.assertRaises(AttributeError):
+            do something
+    def test_yyy(self):
+        pass
+
+if __name__ == '__main__':
+    unittest.main()
+</code></pre>
+
+<h4 id="run-cases">run cases</h4>
+<ul>
+<li>python3 a.py</li>
+<li>python3 -m unittest a.py</li>
+</ul>
+<h3 id="doctest">doctest</h3>
+<p>In your codes, add comment as following:</p>
+<pre><code>def myfunc():
+    '''
+    description to the function
+
+    Example:
+
+    &gt;&gt;&gt; myfunc(1)
+    1
+    &gt;&gt;&gt; myfunc(0)
+    0
+    '''
+    some codes
+
+if __name__ = '__main__':
+    import doctest
+    doctest.testmod()
+</code></pre>
+
+<p>run test:</p>
+<ul>
+<li>python3 -m doctest a.py</li>
+<li>python3 a.py</li>
 </ul>
               
             </div>
