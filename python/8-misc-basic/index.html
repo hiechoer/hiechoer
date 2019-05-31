@@ -1,0 +1,924 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../../img/favicon.ico">
+  <title>misc about io/thread/process/re/virtualenv/graph/socket/email/db/web/async, etc - Hiechoer</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "misc about io/thread/process/re/virtualenv/graph/socket/email/db/web/async, etc";
+    var mkdocs_page_input_path = "python/8-misc-basic.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="../.." class="icon icon-home"> Hiechoer</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <span class="caption-text">Blog</span>
+    <ul class="subnav">
+                <li class="">
+                    
+    <a class="" href="../../qt/">Qt</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../cpp/">C++</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../">Python</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../misc/">Misc</a>
+                </li>
+                <li class="">
+                    
+    <a class="" href="../../other/">Other</a>
+                </li>
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../../about/">Find Us</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="../..">Hiechoer</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="../..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>misc about io/thread/process/re/virtualenv/graph/socket/email/db/web/async, etc</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="misc-about-iothreadprocessrevirtualenvgraphsocketemaildbwebasync-etc">misc about io/thread/process/re/virtualenv/graph/socket/email/db/web/async, etc</h1>
+<hr />
+<h3 id="io">io</h3>
+<h4 id="file-io">file io</h4>
+<pre><code>#!/usr/bin/env python3
+
+def myread(name):
+    with open(name, 'r') as f: # see mode in help(open): r, w, x, a, b, t, +, U
+        # print(f.read()) # read all
+        # print(f.readline()) # read one line
+        for line in f.readlines(): # read all lines and return list
+            print(line.strip()) # strip will ignore \n
+
+def mywrite(name, lines):
+    with open(name, 'w') as f:
+        for line in lines:
+            f.write(line + '\n')
+
+if __name__ == '__main__':
+    mywrite('./a.txt', map(str, [1111, 'xxxxx', True, 'yyyyy']))
+    myread('./a.txt')
+</code></pre>
+
+<h4 id="string-iobytes-io">String IO/Bytes IO</h4>
+<h4 id="file-and-directory">file and directory</h4>
+<ul>
+<li>os: mkdir, rmdir, remove, rename</li>
+<li>os.path: abspath, join, split, splitex</li>
+<li>shutil: copyfile</li>
+</ul>
+<h4 id="pickling-serialization">(pickling) serialization</h4>
+<ul>
+<li>pickle</li>
+<li>json</li>
+</ul>
+<pre><code>#!/usr/bin/env python3
+
+import json
+
+class Temp:
+    def __init__(self, x, y):
+        self.x = x
+        self.y = y
+    def __str__(self):
+        return 'x: %s, y: %s' % (self.x, self.y)
+    __repr__ = __str__
+
+if __name__ == '__main__':
+    d = {'aaa': 12345, 'bbb': True, 'ccc': 'hello'}
+
+    # dump to a sting in json fromation
+    s0 = json.dumps(d)
+    print('dump to json: %s' % s0)
+
+    # dump to a file-like object in json formation
+    with open('a.txt', 'w') as f:
+        json.dump(d, f)
+        print('dump to file')
+
+    # load from json
+    d0 = json.loads(s0)
+    print('load from json: %s' % d0)
+
+    # load from file-like object
+    with open('a.txt', 'r') as f:
+        d1 = json.load(f)
+    print('load from file: %s' % d1)
+
+    t = Temp('xxx', 'yyy')
+    # dump a object to json
+    st = json.dumps(t, default=lambda obj: obj.__dict__)
+    print('dump obj to json: %s' % st)
+
+    # load json to obj
+    tt = json.loads(st, object_hook=lambda d: Temp(d['x'], d['y']))
+    print('load json to obj: %s' % tt)
+</code></pre>
+
+<h3 id="process">process</h3>
+<ul>
+<li>multiprocessing</li>
+</ul>
+<pre><code>#!/usr/bin/env python3
+
+import os
+from multiprocessing import Process
+
+# def process_run():
+def process_run(param):
+    print('sub process pid %d, parent pid %d, param: %s' % (os.getpid(), os.getppid(), param))
+
+if __name__ == '__main__':
+    print('main process pid %d' % os.getpid())
+    # p = Process(target=process_run) # if no parameter in process_run function, please dont add the args in Process
+    p = Process(target=process_run, args=('xxx', ))
+    p.start()
+    p.join()
+    print('main process exit')
+</code></pre>
+
+<ul>
+<li>
+<p>pool</p>
+</li>
+<li>
+<p>subprocess (handle input and output for external process): you can use subprocess to exec a command and  get return value</p>
+</li>
+</ul>
+<pre><code>r = subprocess.call(['ls', '-al'])
+print('return code: %d' % r)
+r = subprocess.Popen(['ls', '-al'], stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+print('return code: %d' % r.returncode)
+</code></pre>
+
+<h3 id="thread">thread</h3>
+<pre><code>#!/usr/bin/env python3
+
+import threading
+
+global_var = 0
+lock = threading.Lock()
+
+# ThreadLocal
+thread_local_var = threading.local()
+
+# temp function to handle thread local var, it is safe in the thread
+def temp_func():
+    print('thread local var: %s' % thread_local_var.aaa)
+
+# def thread_run(): # default args is None
+def thread_run(aaa):
+    print('thread name: %s' % threading.current_thread().name)
+    lock.acquire()
+    global global_var
+    try:
+        global_var = global_var + 1
+    finally:
+        lock.release()
+    thread_local_var.aaa = 'xxxx'
+    temp_func()
+
+if __name__ == '__main__':
+    print('main thread start')
+    t = threading.Thread(target=thread_run, name='sub-thread', args=('sssss', )) # default args is None
+    t.start()
+    t.join()
+    print('main thread exit')
+</code></pre>
+
+<h3 id="re">re</h3>
+<pre><code>#!/usr/bin/env python3
+
+import re
+
+if __name__ == '__main__':
+    # re
+    m = re.match(r'([a-zA-Z0-9\_]+)@([a-zA-Z0-9\_]+\.[a-zA-Z0-9\_]+)', 'hiechoer@yeah.net')
+    if m:
+        print('match: %s, user-name: %s, domain: %s' % (m.group(0), m.group(1), m.group(2)))
+    else:
+        print('not match')
+
+    # split string
+    l = re.split(r'[\s\,]+', 'a,b   cdef')
+    print(l)
+
+    # greedy mode by default, you can add ? to un-greedy mode
+    m = re.match(r'(\d+)(0*)', '10086')
+    print(m.groups()) # m.group(1) will be '100086'
+    m = re.match(r'(\d+?)(0*)', '10086')
+    print(m.groups()) # m.group(1) will be '1'
+
+    # pre-compile
+    pat = re.compile(r'([a-zA-Z0-9\_]+)@([a-zA-Z0-9\_]+\.[a-zA-Z0-9\_]+)')
+    m = pat.match('hiechoer@yeah.net')
+    if m:
+        print(m.groups())
+    else:
+        print('not match')
+</code></pre>
+
+<h3 id="builtin-libs">builtin libs</h3>
+<ul>
+<li>datetime</li>
+</ul>
+<pre><code>#!/usr/bin/env python3
+
+from datetime import datetime
+
+if __name__ == '__main__':
+    dt = datetime.now()
+    print(dt.date())
+    print(dt.time())
+    print(dt.strftime('%Y-%m-%d %H:%M:%S'))
+    print(dt.strftime('%D %T'))
+</code></pre>
+
+<ul>
+<li>namedtuple/deque/OrderedDict/Counter </li>
+</ul>
+<pre><code>#!/usr/bin/env python3
+
+from collections import namedtuple, deque, OrderedDict, Counter
+
+if __name__ == '__main__':
+    # namedtuple - it is a tuple
+    Person = namedtuple('Person', ['name', 'age'])
+    p = Person('zzz', 18)
+    print('name: %s, age: %d' % (p.name, p.age))
+
+    # deque - it is a list
+    q = deque(['111', '222', '333'])
+    q.append('444')
+    q.appendleft('yyy')
+    print(q)
+    q.pop()
+    q.popleft()
+    print(q)
+
+    # OrderedDict - it is a dict
+    od = OrderedDict(a=111, b=222, c=333)
+    print(od.keys())
+
+    # Counter - it is a dict
+    c = Counter()
+    for v in 'hello world':
+        c[v] = c[v] + 1
+    print(c)
+</code></pre>
+
+<ul>
+<li>base64</li>
+</ul>
+<pre><code>#!/usr/bin/env python3
+
+import base64
+
+if __name__ == '__main__':
+    # standard
+    bestr = base64.b64encode(b'hello world')
+    print(bestr)
+    bdstr = base64.b64decode(b'aGVsbG8gd29ybGQ=')
+    print(bdstr)
+    # to avoid '+' and '/'
+    bestr = base64.urlsafe_b64encode(b'hello world')
+    print(bestr)
+    bdstr = base64.urlsafe_b64decode(b'aGVsbG8gd29ybGQ=')
+    print(bdstr)
+</code></pre>
+
+<ul>
+<li>hashlib &amp; hmac</li>
+</ul>
+<pre><code>#!/usr/bin/env python3
+
+import hashlib, hmac
+
+if __name__ == '__main__':
+    # md5
+    md5 = hashlib.md5()
+    md5.update('hello world'.encode('utf-8'))
+    # more call update()
+    print(md5.hexdigest())
+
+    # sha1
+    sha1 = hashlib.sha1()
+    sha1.update('hello world'.encode('utf-8'))
+    # more call update()
+    print(sha1.hexdigest())
+
+    # hmac with salt
+    h = hmac.new(b'i\'m salt', b'init string', digestmod='MD5')
+    # more call update()
+    print(h.hexdigest())
+</code></pre>
+
+<ul>
+<li>contextlib (for 'with ... as')</li>
+</ul>
+<p>For example:</p>
+<pre><code>with open('a.txt', 'r') as f:
+    f.read()
+</code></pre>
+
+<p>Add <code>__enter__()</code> and <code>__exit__()</code> methods in class, then you can use <code>with ... as</code> to avoid call <code>close()</code> method. You'd better use <code>@contextmanager</code> and <code>closing()</code> to avoid to add <code>__enter__()</code> and <code>__exit__()</code>.</p>
+<pre><code>#!/usr/bin/env python3
+
+from contextlib import contextmanager
+
+from contextlib import closing
+from urllib.request import urlopen
+
+################################################################################
+class Temp:
+    def __init__(self, param):
+        self.__param = param
+        print('__init__')
+    def test(self):
+        print('my param: %s' % self.__param)
+
+@contextmanager
+def show_with(param):
+    print('enter show_with')
+    c = Temp(param)
+    yield c
+    print('exit show_with')
+
+################################################################################
+@contextmanager
+def build_tag(name):
+    print('&lt;%s&gt;' % name)
+    yield
+    print('&lt;/%s&gt;' % name)
+
+################################################################################
+# If no context in a object (that is to say, there is not yield in object I think),
+# you couldn't use 'with ... as' on it. But you can use '@closing' to change the
+# object to a context object, then use 'with ... as'
+# The '@closing' is a generator realized by '@contextmanager'
+
+if __name__ == '__main__':
+    with show_with('hahah') as c:
+        c.test()
+    with build_tag('aaa'):
+        print('hello world')
+
+    # show how to @closing
+    with closing(urlopen('https://www.baidu.com')) as p:
+        for line in p:
+            print(line)
+</code></pre>
+
+<ul>
+<li>3rd-party libs</li>
+</ul>
+<p>you can install <code>Anaconda</code> from <code>https://www.anaconda.com/</code> for most of libs then it is unnecessary to <code>pip install</code></p>
+<p>For example: requests (web), psutil (get process/system/network information, etc)</p>
+<pre><code>#!/usr/bin/env python3
+
+import psutil
+
+if __name__ == '__main__':
+    print('cpu count:', psutil.cpu_count())
+    print('boot time:', psutil.boot_time())
+    print('cpu percent:', psutil.cpu_percent())
+    print('cpu stats:', psutil.cpu_stats())
+    print('cpu times:', psutil.cpu_times())
+    print('disk partitions:', psutil.disk_partitions())
+    print('disk usage:', psutil.disk_usage('.'))
+    print('getloadavg:', psutil.getloadavg())
+    #print('net connections:', psutil.net_connections(kind='inet4'))
+    #print('net if addrs:', psutil.net_if_addrs())
+    print('net if stats:', psutil.net_if_stats())
+    print('net io counters:', psutil.net_io_counters())
+    print('pid exists:', psutil.pid_exists(555))
+    print('virtual memory:', psutil.virtual_memory())
+</code></pre>
+
+<h3 id="virtualenv">virtualenv</h3>
+<ul>
+<li><code>virtualenv --no-site-packages .venv</code></li>
+<li><code>source .venv/bin/activate</code></li>
+<li><code>deactivate</code></li>
+</ul>
+<h3 id="graph">graph</h3>
+<ul>
+<li>Tk (builtin)</li>
+<li>wxWidgets</li>
+<li>Qt</li>
+<li>GTK</li>
+</ul>
+<h3 id="socket">socket</h3>
+<h4 id="tcp">tcp</h4>
+<ul>
+<li>server</li>
+</ul>
+<pre><code>#!/usr/bin/env python3
+
+import socket
+from threading import Thread
+
+def callback_thread(sock, addr):
+    print('accept from %s:%s' % addr) # addr is a tuple: ('127.0.0.1', port)
+    while True:
+        d = sock.recv(1024)
+        info = 'you sent ' + d.decode('utf-8')
+        sock.send(info.encode('utf-8'))
+        if d and d.decode('utf-8') == 'exit':
+            break
+    sock.close()
+    print('connection from %s:%s closed' % addr)
+
+if __name__ == '__main__':
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.bind(('127.0.0.1', 8888)) # 127.0.0.1 is localhost, please replace it to your ip addr
+    s.listen(5) # max num of connections is 5
+    while True:
+        sock, addr = s.accept()
+        t = Thread(target=callback_thread, args=(sock, addr))
+        t.start()
+</code></pre>
+
+<ul>
+<li>client</li>
+</ul>
+<pre><code>#!/usr/bin/env python3
+
+import socket
+
+if __name__ == '__main__':
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    s.connect(('127.0.0.1', 8888))
+    s.send('qwerty'.encode('utf-8'))
+    while True:
+        d = s.recv(1024)
+        print(d.decode('utf-8'))
+        if d is not None:
+            break
+    s.send('exit'.encode('utf-8'))
+    s.close()
+</code></pre>
+
+<h4 id="udp">udp</h4>
+<ul>
+<li>server</li>
+</ul>
+<pre><code>#!/usr/bin/env python3
+
+import socket
+
+if __name__ == '__main__':
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.bind(('127.0.0.1', 8888))
+    while True:
+        data, addr = s.recvfrom(1024)
+        info = 'you sent ' + data.decode('utf-8')
+        s.sendto(info.encode('utf-8'), addr)
+        if data is not None and data.decode('utf-8') == 'exit':
+            break
+    s.close()
+</code></pre>
+
+<p>-client</p>
+<pre><code>#!/usr/bin/env python3
+
+import socket
+
+if __name__ == '__main__':
+    s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    s.sendto('xxxx'.encode('utf-8'), ('127.0.0.1', 8888))
+    while True:
+        d = s.recv(1024)
+        print('receive: %s' % d.decode('utf-8'))
+        if d is not None:
+            break
+    s.sendto('exit'.encode('utf-8'), ('127.0.0.1', 8888))
+    s.close()
+</code></pre>
+
+<h3 id="email">email</h3>
+<ul>
+<li>send</li>
+</ul>
+<pre><code>#!/usr/bin/env python3
+
+from email.mime.text import MIMEText
+from email import encoders
+from email.header import Header
+from email.utils import parseaddr, formataddr
+
+import smtplib
+
+def format_addr(info):
+    name, addr = parseaddr(info)
+    return formataddr((Header(name, 'utf-8').encode(), addr))
+
+def send_mail(from_addr, from_pw, to_addr, smtp_server, text, sender, receiver, subject):
+    # 1. send plain mail: mail_text = MIMEText(text, 'plain', 'utf-8')
+    # 2. send html mail: mail_text = MIMEText(text, 'html', 'utf-8'), text content should be html
+    # 3. send plain mail with attachement: MIMEMultipart + MIMEText + MIMEBase
+    # 4. send image: build mail with image as attachement, then change MIMEText to 'html' and refer image: src=&quot;cid:x&quot;
+    # the following only to show plain text
+    mail_text = MIMEText(text, 'plain', 'utf-8')
+    mail_text['From'] = format_addr(sender + '&lt;%s&gt;' % from_addr)
+    mail_text['To'] = format_addr(receiver + '&lt;%s&gt;' % to_addr)
+    mail_text['Subject'] = Header(subject, 'utf-8').encode()
+
+    server = smtplib.SMTP(smtp_server, 25)
+    server.set_debuglevel(1)
+    server.login(from_addr, from_pw)
+    server.sendmail(from_addr, [to_addr], mail_text.as_string())
+    server.quit()
+
+if __name__ == '__main__':
+    from_addr = 'a@a.com'
+    from_pw = 'your-password'
+    to_addr = 'b@b.com'
+    smtp_server = 'smtp.a.com'
+    text = 'first mail sent by python'
+
+    send_mail(from_addr, from_pw, to_addr, smtp_server, text, 'Hiechoer', 'Aoeplus', 'Test smtp')
+</code></pre>
+
+<ul>
+<li>receive</li>
+</ul>
+<p><strong>only show imported packages</strong></p>
+<pre><code>from email.parser import Parser
+from email.header import decode_header
+from email.utils import parseaddr
+import poplib
+</code></pre>
+
+<h3 id="web">web</h3>
+<h4 id="whats-web-framework-flask-for-example-it-parse-http-request-to-method-getpostputdelete-and-path-and-map-it-to-one-of-your-function-it-call-your-function-and-handle-return-information-as-http-response">What's web framework ? Flask for example, it parse http request to <code>method</code> (GET/POST/PUT/DELETE) and <code>path</code> and map it to one of your function, it call your function and handle return information as http response.</h4>
+<p>It seems like the following:</p>
+<pre><code>def application(environ, response_callback): # response_callback is a callback to build http response header
+    method = environ['REQUEST_METHOD']
+    path = environ['PATH_INFO']
+    if method == 'GET' and path == '/':
+        return handle_home(environ, response_callback)
+    if method == 'GET' and path == '/login':
+        return handle_show_login(environ, response_callback)
+    if method == 'POST' and path == '/login':
+        return handle_login(environ, response_callback)
+    # other cases ...
+</code></pre>
+
+<p>Then you can only focus on your function to build http response info and body of html.</p>
+<h4 id="simple-codes-with-flask">simple codes with flask</h4>
+<p>install flask first: pip3 install flask</p>
+<pre><code>#!/usr/bin/env python3
+
+from flask import Flask, request
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    return '&lt;p&gt;it is home page.&lt;/p&gt;&lt;p&gt;&lt;a href=&quot;/login&quot;&gt;login&lt;/a&gt;&lt;/p&gt;'
+
+@app.route('/login', methods=['GET'])
+def show_login():
+    return '''&lt;form action=&quot;/login&quot; method=&quot;post&quot;&gt;
+                  &lt;p&gt;&lt;input name=&quot;name&quot;&gt;&lt;/p&gt;
+                  &lt;p&gt;&lt;input name=&quot;password&quot; type=&quot;password&quot;&gt;&lt;/p&gt;
+                  &lt;p&gt;&lt;button type=&quot;submit&quot;&gt;login&lt;/button&gt;&lt;/p&gt;
+              &lt;/form&gt;
+           '''
+
+@app.route('/login', methods=['POST'])
+def login():
+    if request.form['name'] == 'test' and request.form['password'] == '123456':
+        return 'login successfully'
+    else:
+        return 'login fail'
+
+if __name__ == '__main__':
+    app.run()
+</code></pre>
+
+<h4 id="jinja2-template">jinja2 template</h4>
+<p>install jinja2 first: pip3 install jinja2
+mkdir templates, create template file in this folder, it looks like this:</p>
+<pre><code>a.py
+templates
+    home.jinja2
+    login.jinja2
+    login-success.jinja2
+    login-fail.jinja2
+</code></pre>
+
+<ul>
+<li>a.py</li>
+</ul>
+<pre><code>#!/usr/bin/env python3
+
+from flask import Flask, request, render_template
+
+app = Flask(__name__)
+
+@app.route('/', methods=['GET', 'POST'])
+def home():
+    return render_template('home.jinja2')
+
+@app.route('/login', methods=['GET'])
+def show_login():
+    return render_template('login.jinja2')
+
+@app.route('/login', methods=['POST'])
+def login():
+    name = request.form['name']
+    password = request.form['password']
+    if name == 'test' and password == '123456':
+        return render_template('login-success.jinja2')
+    else:
+        return render_template('login-fail.jinja2', name=name, msg='login fail')
+
+if __name__ == '__main__':
+    app.run()
+</code></pre>
+
+<ul>
+<li>home.jinja2</li>
+</ul>
+<pre><code>&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;show flask and jinja2&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;a href=&quot;/login&quot;&gt;login&lt;/a&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<ul>
+<li>login.jinja2</li>
+</ul>
+<pre><code>&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;show flask and jinja2&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        &lt;form action=&quot;/login&quot; method=&quot;post&quot;&gt;
+            &lt;p&gt;&lt;input name=&quot;name&quot;&gt;&lt;/p&gt;
+            &lt;p&gt;&lt;input name=&quot;password&quot; type=&quot;password&quot;&gt;&lt;/p&gt;
+            &lt;p&gt;&lt;button type=&quot;submit&quot;&gt;login&lt;/button&gt;&lt;/p&gt;
+        &lt;/form&gt;
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<ul>
+<li>login-success.jinja2</li>
+</ul>
+<pre><code>&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;show flask and jinja2&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        login successfully
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<ul>
+<li>login-fail.jinja2</li>
+</ul>
+<pre><code>&lt;html&gt;
+    &lt;head&gt;
+        &lt;title&gt;show flask and jinja2&lt;/title&gt;
+    &lt;/head&gt;
+    &lt;body&gt;
+        login fail ({{ name }}): {{ msg }}
+    &lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+
+<h4 id="run-python3-apy">run: python3 a.py</h4>
+<h3 id="asyncio">asyncio</h3>
+<h4 id="understanding-of-next-and-send-in-generator">understanding of <code>next()</code> and <code>send()</code> in generator</h4>
+<ul>
+<li>yield in function, so the function will be a generator</li>
+<li>call a function with yield in it, it return a generator object but not return value, then you can call <code>next(g)</code> or <code>g.send(None)</code> or <code>g.send(value)</code> or <code>for v in g</code></li>
+<li><code>next(g)</code> only can send None into generator but <code>g.send(value)</code> can send special expression value of yield into it, <code>next(g)</code> is the same as <code>g.send(None)</code></li>
+<li>when first call, please use <code>next(g)</code> or <code>g.send(None)</code> or <code>for</code>, you should not call <code>g.send(!None value)</code></li>
+</ul>
+<p>For example:</p>
+<pre><code>#!/usr/bin/env python3
+
+def consumer():
+    r = 'here'
+    while True:
+        n1 = yield r
+        if not n1:
+            return
+        print('consumer() consuming %s' % n1)
+        r = '200 OK ' + str(n1)
+
+def produce(c):
+    aa = c.send(None)
+    n = 0
+    while n &lt; 5:
+        n = n + 1
+        print('produce(c) producing %s' % n)
+        r1 = c.send(n)
+        print('produce(c) consumer return %s' % r1)
+    c.close()
+
+if __name__ == '__main__':
+    c = consumer()
+    produce(c)
+</code></pre>
+
+<ul>
+<li>call c = consumer(), c is a generator object</li>
+<li>call produce(c)</li>
+<li>exec aa = c.send(None), it start generator, exec codes from the first line in consumer() function</li>
+<li>exec <code>r = 'here'</code>, then <code>while True</code>, <code>n1 = yield r</code>, then return from generator with value r ('here'), but after this line, n1 is still not defined, and aa is string 'here'</li>
+<li>exec <code>n = 0</code>, <code>while n &lt; 5</code>, <code>n = n + 1</code>, then n is 1 now</li>
+<li><code>print('produce(c) producing %s' % n)</code>, output is: <code>produce(c) producing 1</code></li>
+<li>call <code>r1 = c.send(n)</code></li>
+<li>it send value 1 into yield, then generator c re-exec after yield, and n1 will be 1 firstly, and continue to run after yield line.</li>
+<li><code>print('consumer() consuming %s' % n1)</code> output: <code>consumer() consuming 1</code>, then set r to be '200 OK 1'</li>
+<li>continue exec next loop in while, then <code>yield r</code> and return from generator, but n1 is still 1 but r1 will be '200 OK 1'</li>
+<li><code>print('produce(c) consumer return %s' % r1)</code> output: 'produce(c) consumer return 200 OK 1'</li>
+<li>contine to run in <code>while n &lt; 5</code> and next look</li>
+<li>...</li>
+<li>at last, <code>c.close()</code> to close consumer generator</li>
+</ul>
+<h4 id="async-await">async &amp; await</h4>
+<p>If python version &gt;= 3.5, <code>async</code> &amp; <code>await</code> are new keywords to instead of <code>@asyncio.coroutine</code> and <code>yield from</code>. <code>@async.corouting</code> can translate a generator to be a coroutine, <code>yield from</code> can call another corouting</p>
+<pre><code>#!/usr/bin/env python3
+
+import asyncio
+
+async def hello():
+    print('enter hello')
+    # await another_coroutine_func()
+    await asyncio.sleep(1)
+    print('exit hello')
+
+if __name__ == '__main__':
+    loop = asyncio.get_event_loop()
+    loop.run_until_complete(asyncio.wait([hello(), hello(), hello()]))
+    loop.close()
+</code></pre>
+
+<p>You couldn't call a coroutine directly (it return a coroutine object if your call it directly). There are several methods to run a coroutine (python3.7+), for example event-loop/asyncio.run/task, etc.</p>
+<ul>
+<li>coroutine can be run in event-loop (asyncio.get_event_loop())</li>
+<li>coroutine can call general function (include generator)</li>
+<li>coroutine can NOT call a pending interface (for example in a coroutine, you can NOT call time.sleep(1), but you can call asyncio.sleep(1))</li>
+<li>general function can NOT call coroutine, I think it is because multi corouting(s) must be in event-loop in a thread.</li>
+</ul>
+<p>I still hava a question, how to realize notifiction mechanism in underlying of corouting, maybe stack/register or IRQ or IPC or send() function in generator ?</p>
+<h4 id="aiohttp">aiohttp</h4>
+<p>aiohttp is a web framework to parse http request and build http response in async mode (flask is web framework in sync mode). please install: pip3 install aiohttp aiohttp_jinja2 jinja2</p>
+<pre><code>#!/usr/bin/env python3
+
+import asyncio
+from aiohttp import web
+import aiohttp_jinja2
+import jinja2
+from pathlib import Path
+
+here = Path(__file__).resolve().parent
+
+@aiohttp_jinja2.template('home.jinja2')
+async def home(request):
+    # handle async event, for example await handle_db(). just to call sleep to show async mode here
+    await asyncio.sleep(0.5)
+    return {}
+
+async def init_web(loop):
+    app = web.Application(loop=loop)
+    aiohttp_jinja2.setup(app, loader=jinja2.FileSystemLoader(str(here))) # str(here) is path of templates
+    app.router.add_route('GET', '/', home)
+    return await loop.create_server(app.make_handler(), '127.0.0.1', 8080)
+
+def run_web():
+    loop = asyncio.get_event_loop()
+    # dont' use &quot;loop.run_until_complete(asyncio.wait([]))&quot; because I just run one web instance
+    loop.run_until_complete(init_web(loop))
+    loop.run_forever()
+
+if __name__ == '__main__':
+    run_web()
+</code></pre>
+              
+            </div>
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+    </span>
+</div>
+    <script>var base_url = '../..';</script>
+    <script src="../../js/theme.js" defer></script>
+      <script src="../../search/main.js" defer></script>
+
+</body>
+</html>
