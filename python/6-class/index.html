@@ -445,7 +445,7 @@ if __name__ == '__main__':
 <pre><code>#!/usr/bin/env python3
 
 ################################################################################
-# for filed
+# for field
 class Field:
     def __init__(self, name, column_type):
         self.name = name
@@ -516,9 +516,33 @@ class Model(dict, metaclass=ModelMetaclass):
 
 ################################################################################
 # Please define your special Model based on class Model, for example:
+# although you define 2 class attributes (not instance attributes) in class Temp,
+# but after generate class Temp(Model) through metaclass, these 2 attributes will
+# be translated into new attributes '__mappings__', and a new attribute '__table__'
+# with value the same as name of class Temp.
+# That is to say, there will be the following attributes in class Temp but no
+# 'name' and 'num' attributes in it:
+# __mappings__ = {'name': Field name (type: char(32)), 'num': Field num ...
+# __table__ = 'Temp'
+#
+# If you define a general class but no this metaclass with class attribute, the
+# attribute will be general class attribute
 class Temp(Model):
     name = StrField('name')
     num = IntField('num')
+
+# IMPORTANT:
+# when you create a instance of class Temp, you can add any pair of key-value,
+# for example: t = Temp(a=111, b=True, c='xxx'), but it is orm so we only want
+# to keep them the same as names which in Temp.__mappings__, so we'd better to
+# define like this: t = Temp(name='xxx', num=5). And the class Temp is
+# a child class of dict, so these values will be in t.items(), when you call
+# t.items() it will show like this: dict_items([('name', 'xxx'), ('num', 5)])
+# or you can print(t) directly, it will show: {'name': 'xxx', 'num': 5}
+#
+# SO: Temp.__mappings__ has nothing with t.items(), they are different things.
+# they should only be the same name, Temp.__mappings__ is attribute of class,
+# and t.items() is value of instance.
 
 if __name__ == '__main__':
     t = Temp(name='zhangsan', num=18)
